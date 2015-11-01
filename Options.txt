@@ -1,0 +1,11 @@
+Option 0: Initialization. Send Videos locally available to Server.
+Payload contains a semicolon seperated list of videos available at the Client's "user.home"\Videos
+
+Example:
+|option|0|/option||data|Abhinav.xlsx;Captures;hwk3-sol-2.doc;SolutionsSeptember2009.pdf;|data|
+----
+
+Option 1: Client is requesting a list of videos available with the swarm.
+Payload is null
+
+Example: 
