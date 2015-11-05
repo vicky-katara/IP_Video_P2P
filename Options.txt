@@ -9,3 +9,15 @@ Option 1: Client is requesting a list of videos available with the swarm.
 Payload is null
 
 Example: 
+
+Option 2: Get video list from server
+All the videos that are present in the server are sent to the client.
+
+Example:
+|option|2|/option||data|{1,"Intro to Algos",8,mp3};{2,"Intro to networks",5,mp4};{3,"Intro to AI",6,mp4}|data|
+
+Option 4: Server responds with a list of peers
+The server sends a list of active peers to the client.
+
+Example:
+|option|4|/option||data|10;20;12;24;|data|
