@@ -23,14 +23,10 @@ public class Video {
 				val[start++] = arr[0];
 				val[start++] = arr[1];
 		}
-		for(String devan : val){
-			System.out.println(devan);
+		for(String str1 : val){
+			System.out.println(str1);
 		}
 	}
 
-	public static void main(String[] args) {
-		String str = "Intro to algos:8;Intro to AI:10";
-		Video obj = new Video(str);
-	}
 
 }

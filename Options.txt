@@ -1,6 +1,6 @@
 Option 0: Initialization. Send Videos locally available to Server.
 Client sends the port number and payload contains a semicolon seperated list of videos available at the Client's "user.home"\Videos
-NOTE:Client should send the Video title, numChunks and format. {title,numchunks}
+NOTE:Client should send the Video title, numChunks and format. {title,numchunks} - format : intro to algos:8;intro to ai:4
 
 Example:
 |option|0|/option||data|Port_number:Abhinav.xlsx;Captures;hwk3-sol-2.doc;SolutionsSeptember2009.pdf;|data|
