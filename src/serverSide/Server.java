@@ -23,31 +23,49 @@ public class Server implements Runnable{
 				 System.out.println("\n\nClient connected to Registration Server");
 							
 				 BufferedReader clientData = new BufferedReader(new InputStreamReader(client.getInputStream()));
+				 PrintStream pw = new PrintStream(client.getOutputStream());
 				 String Data = clientData.readLine();
-				 Packet Op1Packet = new Packet(Data);
+				 Packet OpPacket = new Packet(Data);
 				 try { 
-					  if (Op1Packet.option != 1) {
-					
-					 throw new Exception();
-					 }
-				 }
+					 	  if (OpPacket.option == 0) 
+					  {
+						  Video V = new Video(OpPacket.data);
+					  }
+						  else if (OpPacket.option == 1)
+						  {
+							  VideoMenu obj = new VideoMenu(); 
+							  pw.println(obj.returnMenu()); // sends videomenu through the socket to client
+							  
+						  }
+						  else if (OpPacket.option == 3)
+						  {
+							  // extract the videoID from the option and check for the peers which have the video and send the list of peers which have that video
+							  data_splitting(OpPacket);
+						  }
+						  else {
+							  throw new Exception();
+						  }
+					 
+					 
+				 	}
 					 catch(Exception E){
 						 System.out.println("Invalid Option");
 					 }
-					 Video V = new Video(Op1Packet);
+					
 					 
 				 
-				 PrintStream pw = new PrintStream(client.getOutputStream());
+				 
 				 InetAddress address = client.getInetAddress();	// get ip address of client(i.e address to which the socket is connected)
 				 System.out.println("IP address of client : " + address.toString()); // to test 
 				 int port = client.getPort();  // GET Port number to which socket is connected for test purposes only
-				 System.out.println("Port  address on which client is connected :" + port);
+				 System.out.println("Port address on which client is connected :" + port);
 				 countID++;
-				 // extract port number to which client listens from option0 <data>
+				 
 					 }
 				catch(Exception e)
 					 {
 						 // yet to insert 
+						System.out.println("Error while connecting to Server");
 					 }
 					
 				}
