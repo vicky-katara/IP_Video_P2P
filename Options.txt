@@ -15,7 +15,7 @@ Option 2: Get video list from server
 All the videos that are present in the server are sent to the client.
 
 Example:
-|option|2|/option||data|{1,"Intro to Algos",8,mp3};{2,"Intro to networks",5,mp4};{3,"Intro to AI",6,mp4}|data|
+|option|2|/option||data|1,Intro to Algos,8,mp3;2,Intro to networks,5,mp4;3,Intro to AI,6,mp4|data|
 
 
 Option 3:  client chooses Video and requests for the video from server by sending VideoID

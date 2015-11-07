@@ -95,7 +95,7 @@ public class Client {
 		catch(Exception e){
 			e.printStackTrace();
 			if(e.getMessage().contains("receiveMessageOn"))
-				System.exit(12); // exit 11 --> client to video Server abnormally disconnected
+				System.exit(12); // exit 12 --> client to video Server abnormally disconnected
 			return "No reply received";
 		}
 	}
@@ -111,8 +111,8 @@ public class Client {
 			case 1: //String getVideoListPayload = preparePayLoad(1, "");
 				String getVideoListPayload = new Packet(1, "").getPayload();
 				sendMesssageOn(socketToVideoServer, getVideoListPayload);
-				String videoList = receiveMessageOn(socketToVideoServer);
-				printVideoList(videoList);
+				Packet videosPacket = new Packet(receiveMessageOn(socketToVideoServer));
+				printVideoList(videosPacket);
 				askUserForVideo();
 				break;
 			case 2:
@@ -177,8 +177,18 @@ public class Client {
 	
 	
 	
-	void printVideoList(String s){ //Also populate the HashMap videos with (index, videoID) format.
-		//String s1 = "|option|2|/option||data|{1,"Intro to Algos",8,mp3};{2,"Intro to networks",5,mp4};{3,"Intro to AI",6,mp4}|data|"
+	void printVideoList(Packet videosPacket){ //Also populate the HashMap videos with (index, videoID) format.
+		try{
+			if(videosPacket.option!=2)
+				throw new Exception("Message received as Option 2, is not option 2 message. Exiting");
+			String videoData = videosPacket.data;
+			
+		}
+		catch(Exception e){
+			if(e.getMessage().contains("Message received as Option 2"))
+				System.exit(0);
+			e.printStackTrace();
+		}	
 	}
 	
 	public static void main(String[] args) {
