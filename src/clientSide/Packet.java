@@ -13,7 +13,7 @@ public class Packet {
 	
 	Packet(String payload){
 		String[] arr = payload.split("\\|");
-		System.out.println(Arrays.toString(arr));
+		//System.out.println(Arrays.toString(arr));
 		this.option = Integer.parseInt(arr[2]);
 		this.data = arr[6];
 	}

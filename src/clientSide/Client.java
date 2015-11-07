@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -177,11 +178,33 @@ public class Client {
 	
 	
 	
-	void printVideoList(Packet videosPacket){ //Also populate the HashMap videos with (index, videoID) format.
+	void  printVideoList(Packet videosPacket){ //Also populate the HashMap videos with (index, videoID) format.
 		try{
 			if(videosPacket.option!=2)
 				throw new Exception("Message received as Option 2, is not option 2 message. Exiting");
 			String videoData = videosPacket.data;
+			
+			String[] list=videoData.split(";");
+			//System.out.println(Arrays.toString(list));
+		   
+			System.out.println(".............Video Details................");
+			System.out.println("Option\t\t Video title\t\t No. of chunks \t      Format");
+			for (int i = 0; i < list.length; i++)
+			{ 
+				//System.out.println(list[i]);
+				String[] videoDetails= list[i].split(",");
+				//System.out.println(Arrays.toString(videoDetails));
+				StringBuffer s = new StringBuffer(videoDetails[1]);
+				s.append("                    ");
+				String title = s.substring(0, 20);
+			   System.out.println(videoDetails[0]+"\t\t"+title+"\t\t"+videoDetails[2]+"\t\t"+videoDetails[3]);
+					
+	
+				
+				
+			}
+		
+		
 			
 		}
 		catch(Exception e){
@@ -192,7 +215,11 @@ public class Client {
 	}
 	
 	public static void main(String[] args) {
-		new Client("",0);
+//new Client("",0);
 		//int i = Integer.parseInt(null);
+		
+		//Packet p = new Packet("|option|2|/option||data|1,Intro to Algos,8,mp3;2,Intro to networks,5,mp4;3,Intro to AI,6,mp4|data|");
+		//System.out.println(p);
+		//printVideoList(p);
 	}
 }
