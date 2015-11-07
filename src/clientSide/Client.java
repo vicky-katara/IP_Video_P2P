@@ -20,19 +20,19 @@ public class Client {
 		//*this.serverIP = serverIP;
 		//this.serverPort = port;
 		
-		socketToVideoServer = returnSocketTo(serverIP, port);// connect to server
+		//socketToVideoServer = returnSocketTo(serverIP, port);// connect to server
 		
 		// get list of files in user.home/videos
 		String pathToVideosDir = System.getProperty("user.home")+"\\Videos";
 		ArrayList<File> listOfFiles = ListFiles.returnListOfFilesInDirectory(pathToVideosDir);
 		
 		//prepare list of video file names
-		String filenames = getConcatenatedFileNames(listOfFiles, ';');
-		String videoListPayload = preparePayLoad(0, filenames); // FileNames is Option 0:
+		String fileInfo = getConcatenatedFileInfo(listOfFiles);
+		String videoListPayload = preparePayLoad(0, fileInfo); // FileNames is Option 0:
 		
 		System.out.println(videoListPayload);
 		// send list of videos to server
-		sendMesssageOn(socketToVideoServer, videoListPayload);
+		//sendMesssageOn(socketToVideoServer, videoListPayload);
 		interact();
 		//closeSocketToServer(socketToVideoServer);
 	}
@@ -57,10 +57,10 @@ public class Client {
 		}
 	}
 	
-	String getConcatenatedFileNames(ArrayList<File> listOfFiles, char c){
+	String getConcatenatedFileInfo(ArrayList<File> listOfFiles){
 		StringBuffer ret = new StringBuffer();
 		for(int i=0;i<listOfFiles.size();i++){
-			ret.append(listOfFiles.get(i).getName()).append(c);
+			ret.append(listOfFiles.get(i).getName()).append(":").append(listOfFiles.get(i).length()/(256*1024)).append(';');
 		}
 		return ret.toString();
 	}
@@ -178,7 +178,7 @@ public class Client {
 	}
 	
 	public static void main(String[] args) {
-		//new Client("",0);
-		int i = Integer.parseInt(null);
+		new Client("",0);
+		//int i = Integer.parseInt(null);
 	}
 }
