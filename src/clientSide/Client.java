@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -20,19 +21,19 @@ public class Client {
 		//*this.serverIP = serverIP;
 		//this.serverPort = port;
 		
-		socketToVideoServer = returnSocketTo(serverIP, port);// connect to server
+		//socketToVideoServer = returnSocketTo(serverIP, port);// connect to server
 		
 		// get list of files in user.home/videos
 		String pathToVideosDir = System.getProperty("user.home")+"\\Videos";
 		ArrayList<File> listOfFiles = ListFiles.returnListOfFilesInDirectory(pathToVideosDir);
 		
 		//prepare list of video file names
-		String filenames = getConcatenatedFileNames(listOfFiles, ';');
-		String videoListPayload = preparePayLoad(0, filenames); // FileNames is Option 0:
+		String fileInfo = getConcatenatedFileInfo(listOfFiles);
+		String videoListPayload = new Packet(0, fileInfo).getPayload();//preparePayLoad(0, fileInfo); // FileNames is Option 0:
 		
 		System.out.println(videoListPayload);
 		// send list of videos to server
-		sendMesssageOn(socketToVideoServer, videoListPayload);
+		//sendMesssageOn(socketToVideoServer, videoListPayload);
 		interact();
 		//closeSocketToServer(socketToVideoServer);
 	}
@@ -57,17 +58,17 @@ public class Client {
 		}
 	}
 	
-	String getConcatenatedFileNames(ArrayList<File> listOfFiles, char c){
+	String getConcatenatedFileInfo(ArrayList<File> listOfFiles){
 		StringBuffer ret = new StringBuffer();
 		for(int i=0;i<listOfFiles.size();i++){
-			ret.append(listOfFiles.get(i).getName()).append(c);
+			ret.append(listOfFiles.get(i).getName()).append(":").append(listOfFiles.get(i).length()/(256*1024)).append(';');
 		}
 		return ret.toString();
 	}
 	
-	String preparePayLoad(int option, String data){
-		return "|option|"+option+"|/option||data|"+data+"|data|";
-	}
+//	String preparePayLoad(int option, String data){
+//		return "|option|"+option+"|/option||data|"+data+"|data|";
+//	}
 	
 	void sendMesssageOn(Socket socket, String payload){
 		try{
@@ -95,7 +96,7 @@ public class Client {
 		catch(Exception e){
 			e.printStackTrace();
 			if(e.getMessage().contains("receiveMessageOn"))
-				System.exit(12); // exit 11 --> client to video Server abnormally disconnected
+				System.exit(12); // exit 12 --> client to video Server abnormally disconnected
 			return "No reply received";
 		}
 	}
@@ -108,10 +109,11 @@ public class Client {
 			switch(input){
 			case 0: System.out.println("Thank you for watching! Paying for movies is too mainstream! :P");
 				return;
-			case 1: String getVideoListPayload = preparePayLoad(1, "");
+			case 1: //String getVideoListPayload = preparePayLoad(1, "");
+				String getVideoListPayload = new Packet(1, "").getPayload();
 				sendMesssageOn(socketToVideoServer, getVideoListPayload);
-				String videoList = receiveMessageOn(socketToVideoServer);
-				printVideoList(videoList);
+				Packet videosPacket = new Packet(receiveMessageOn(socketToVideoServer));
+				printVideoList(videosPacket);
 				askUserForVideo();
 				break;
 			case 2:
@@ -140,7 +142,8 @@ public class Client {
 				System.out.println("Please enter a valid Line Number");
 				continue;
 			}
-			sendMesssageOn(socketToVideoServer, preparePayLoad(3, id.toString()));
+			//sendMesssageOn(socketToVideoServer, preparePayLoad(3, id.toString()));
+			sendMesssageOn(socketToVideoServer, new Packet(3, id.toString()).getPayload());
 			String opttion4message = this.receiveMessageOn(socketToVideoServer);
 			ArrayList<Peer> peers = getPeersFromOption4Message(opttion4message);
 			
@@ -173,12 +176,50 @@ public class Client {
 		return null;	
 	}
 	
-	void printVideoList(String s){ //Also populate the HashMap videos with (index, videoID) format.
+	
+	
+	void  printVideoList(Packet videosPacket){ //Also populate the HashMap videos with (index, videoID) format.
+		try{
+			if(videosPacket.option!=2)
+				throw new Exception("Message received as Option 2, is not option 2 message. Exiting");
+			String videoData = videosPacket.data;
+			
+			String[] list=videoData.split(";");
+			//System.out.println(Arrays.toString(list));
+		   
+			System.out.println(".............Video Details................");
+			System.out.println("Option\t\t Video title\t\t No. of chunks \t      Format");
+			for (int i = 0; i < list.length; i++)
+			{ 
+				//System.out.println(list[i]);
+				String[] videoDetails= list[i].split(",");
+				//System.out.println(Arrays.toString(videoDetails));
+				StringBuffer s = new StringBuffer(videoDetails[1]);
+				s.append("                    ");
+				String title = s.substring(0, 20);
+			   System.out.println(videoDetails[0]+"\t\t"+title+"\t\t"+videoDetails[2]+"\t\t"+videoDetails[3]);
+					
+	
+				
+				
+			}
 		
+		
+			
+		}
+		catch(Exception e){
+			if(e.getMessage().contains("Message received as Option 2"))
+				System.exit(0);
+			e.printStackTrace();
+		}	
 	}
 	
 	public static void main(String[] args) {
-		//new Client("",0);
-		int i = Integer.parseInt(null);
+//new Client("",0);
+		//int i = Integer.parseInt(null);
+		
+		//Packet p = new Packet("|option|2|/option||data|1,Intro to Algos,8,mp3;2,Intro to networks,5,mp4;3,Intro to AI,6,mp4|data|");
+		//System.out.println(p);
+		//printVideoList(p);
 	}
 }
