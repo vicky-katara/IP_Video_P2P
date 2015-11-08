@@ -45,7 +45,8 @@ public class Video {
 		{
 			String[] values = videos[vid_num].split(":");
 			Video newV = new Video(-1, values[0], "mp4", Integer.parseInt(values[1]));
-			if(!(newV.videoList.contains(newV))){
+			if(!(newV.videoList.contains(newV)))
+			{
 				newV.videoID = videoIDCount++;
 				newV.format="mp4";
 				newV.videoTitle=values[0];
@@ -66,8 +67,4 @@ public class Video {
 		Video2("intro to algos:8;intro to ai:4",3);
 	}
 	
-	public static void main(String[] args)
-	{
-		Video v = new Video("intro to algos:8;intro to ai:4",3);
-	}
 }
