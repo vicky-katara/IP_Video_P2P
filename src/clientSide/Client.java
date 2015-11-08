@@ -83,7 +83,7 @@ public class Client {
 			dos.writeUTF(payload);
 		}
 		catch(Exception e){
-			System.out.println(e.getStackTrace());
+			e.printStackTrace();
 			if(e.getMessage().contains("sendMessageOn"))
 				System.exit(11); // exit 11 --> client to video Server abnormally disconnected
 		}
