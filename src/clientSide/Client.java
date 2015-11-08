@@ -13,12 +13,15 @@ public class Client {
 	
 	//String serverIP;
 	//int serverPort;
+	int receiverPortNumber = 6789;
 	private Socket socketToVideoServer;
-	private HashMap<Integer, Integer> videoID;
+	private HashMap<Integer, Integer> videoID = new HashMap<Integer, Integer>();
 	
 	Client(String serverIP, int port){
 		//*this.serverIP = serverIP;
 		//this.serverPort = port;
+		
+		//Start Receiver Thread which will intercept request messages
 		
 		//socketToVideoServer = returnSocketTo(serverIP, port);// connect to server
 		
@@ -28,13 +31,14 @@ public class Client {
 		
 		//prepare list of video file names
 		String fileInfo = getConcatenatedFileInfo(listOfFiles);
-		String videoListPayload = preparePayLoad(0, fileInfo); // FileNames is Option 0:
+		String videoListPayload = new Packet(0, this.receiverPortNumber+":"+fileInfo).getPayload();//preparePayLoad(0, fileInfo); // FileNames is Option 0:
 		
 		System.out.println(videoListPayload);
 		// send list of videos to server
 		//sendMesssageOn(socketToVideoServer, videoListPayload);
 		interact();
 		//closeSocketToServer(socketToVideoServer);
+		
 	}
 	
 	Socket returnSocketTo(String serverIP, int serverPort){
@@ -65,9 +69,9 @@ public class Client {
 		return ret.toString();
 	}
 	
-	String preparePayLoad(int option, String data){
-		return "|option|"+option+"|/option||data|"+data+"|data|";
-	}
+//	String preparePayLoad(int option, String data){
+//		return "|option|"+option+"|/option||data|"+data+"|data|";
+//	}
 	
 	void sendMesssageOn(Socket socket, String payload){
 		try{
@@ -79,7 +83,7 @@ public class Client {
 			dos.writeUTF(payload);
 		}
 		catch(Exception e){
-			System.out.println(e.getStackTrace());
+			e.printStackTrace();
 			if(e.getMessage().contains("sendMessageOn"))
 				System.exit(11); // exit 11 --> client to video Server abnormally disconnected
 		}
@@ -95,7 +99,7 @@ public class Client {
 		catch(Exception e){
 			e.printStackTrace();
 			if(e.getMessage().contains("receiveMessageOn"))
-				System.exit(12); // exit 11 --> client to video Server abnormally disconnected
+				System.exit(12); // exit 12 --> client to video Server abnormally disconnected
 			return "No reply received";
 		}
 	}
@@ -108,10 +112,11 @@ public class Client {
 			switch(input){
 			case 0: System.out.println("Thank you for watching! Paying for movies is too mainstream! :P");
 				return;
-			case 1: String getVideoListPayload = preparePayLoad(1, "");
+			case 1: //String getVideoListPayload = preparePayLoad(1, "");
+				String getVideoListPayload = new Packet(1, "").getPayload();
 				sendMesssageOn(socketToVideoServer, getVideoListPayload);
-				String videoList = receiveMessageOn(socketToVideoServer);
-				printVideoList(videoList);
+				Packet videosPacket = new Packet(receiveMessageOn(socketToVideoServer));
+				printVideoList(videosPacket);
 				askUserForVideo();
 				break;
 			case 2:
@@ -140,9 +145,12 @@ public class Client {
 				System.out.println("Please enter a valid Line Number");
 				continue;
 			}
-			sendMesssageOn(socketToVideoServer, preparePayLoad(3, id.toString()));
-			String opttion4message = this.receiveMessageOn(socketToVideoServer);
-			ArrayList<Peer> peers = getPeersFromOption4Message(opttion4message);
+			//sendMesssageOn(socketToVideoServer, preparePayLoad(3, id.toString()));
+			sendMesssageOn(socketToVideoServer, new Packet(3, id.toString()).getPayload());
+			
+			Packet option4packet = new Packet(receiveMessageOn(socketToVideoServer));
+			
+			ArrayList<Peer> peerList = getPeersFromOption4packet(option4packet);
 			
 			//
 			// start_video_while collating packets
@@ -153,17 +161,24 @@ public class Client {
 		
 	}
 	
-	ArrayList<Peer> getPeersFromOption4Message(String option4message){
+	ArrayList<Peer> getPeersFromOption4packet(Packet option4packet){
 		try{
-			if(option4message.contains("4")==false)
+			if(option4packet.option!=4)
 				throw new Exception("Message received as Option 4, is not option 4 message. Exiting");
+			ArrayList<Peer> listOfPeers = new ArrayList<Peer> ();
+			//create array list
+			String[] peerList= option4packet.data.split(";");
+			for (int i = 0; i < peerList.length; i++)
+			{	
+				String[] peerDetails= peerList[i].split(":");
+				//System.out.println(Arrays.toString(peerDetails));
+				listOfPeers.add(new Peer(peerDetails[0],Integer.parseInt(peerDetails[1])));
+				
+			}	
 			
 			
-			//
 			
-			///
-			
-			return null;
+			return listOfPeers;
 		}
 		catch(Exception e){
 			if(e.getMessage().contains("Message received as Option 4"))
@@ -173,12 +188,51 @@ public class Client {
 		return null;	
 	}
 	
-	void printVideoList(String s){ //Also populate the HashMap videos with (index, videoID) format.
+	
+	
+	void  printVideoList(Packet videosPacket){ //Also populate the HashMap videos with (index, videoID) format.
+		try{
+			if(videosPacket.option!=2)
+				throw new Exception("Message received as Option 2, is not option 2 message. Exiting");
+			String videoData = videosPacket.data;
+			
+			String[] list=videoData.split(";");
+			//System.out.println(Arrays.toString(list));
+		   
+			System.out.println(".............Video Details................");
+			System.out.println("Sr. No\t\t Video title\t\t No. of chunks \t      Format");
+			for (int i = 0; i < list.length; i++)
+			{ 
+				//System.out.println(list[i]);
+				String[] videoDetails= list[i].split(",");
+				//System.out.println(Arrays.toString(videoDetails));
+				StringBuffer s = new StringBuffer(videoDetails[1]);
+				s.append("                    ");
+				String title = s.substring(0, 20);
+			   System.out.println((i+1)+"\t\t"+title+"\t\t"+videoDetails[2]+"\t\t"+videoDetails[3]);
+			   
+			   videoID.put(i+1,Integer.parseInt(videoDetails[0]));
+				
+			}
 		
+		
+			
+		}
+		catch(Exception e){
+			if(e.getMessage().contains("Message received as Option 2"))
+				System.exit(0);
+			e.printStackTrace();
+		}	
 	}
 	
-	public static void main(String[] args) {
-		new Client("",0);
+	public static void main(String[] args)throws IOException {
+		Client c =new Client("",0);
+		new Receiver(c.receiverPortNumber).start();
 		//int i = Integer.parseInt(null);
+		
+		//Packet p = new Packet("|option|4|/option||data|192.168.1.1:20000;192.168.1.2:24000;|data|");
+		//System.out.println(p);
+		//System.out.println(getPeersFromOption4packet(p));
+		
 	}
 }
