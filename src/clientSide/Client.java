@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -14,12 +13,15 @@ public class Client {
 	
 	//String serverIP;
 	//int serverPort;
+	int receiverPortNumber = 6789;
 	private Socket socketToVideoServer;
 	private HashMap<Integer, Integer> videoID = new HashMap<Integer, Integer>();
 	
 	Client(String serverIP, int port){
 		//*this.serverIP = serverIP;
 		//this.serverPort = port;
+		
+		//Start Receiver Thread which will intercept request messages
 		
 		//socketToVideoServer = returnSocketTo(serverIP, port);// connect to server
 		
@@ -29,13 +31,14 @@ public class Client {
 		
 		//prepare list of video file names
 		String fileInfo = getConcatenatedFileInfo(listOfFiles);
-		String videoListPayload = new Packet(0, fileInfo).getPayload();//preparePayLoad(0, fileInfo); // FileNames is Option 0:
+		String videoListPayload = new Packet(0, this.receiverPortNumber+":"+fileInfo).getPayload();//preparePayLoad(0, fileInfo); // FileNames is Option 0:
 		
 		System.out.println(videoListPayload);
 		// send list of videos to server
 		//sendMesssageOn(socketToVideoServer, videoListPayload);
 		interact();
 		//closeSocketToServer(socketToVideoServer);
+		
 	}
 	
 	Socket returnSocketTo(String serverIP, int serverPort){
@@ -222,8 +225,9 @@ public class Client {
 		}	
 	}
 	
-	public static void main(String[] args) {
-//new Client("",0);
+	public static void main(String[] args)throws IOException {
+		Client c =new Client("",0);
+		new Receiver(c.receiverPortNumber).start();
 		//int i = Integer.parseInt(null);
 		
 		//Packet p = new Packet("|option|4|/option||data|192.168.1.1:20000;192.168.1.2:24000;|data|");
