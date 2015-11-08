@@ -26,4 +26,4 @@ Option 4: Server responds with a list of peers
 The server sends a list of active peers to the client.
 
 Example:
-|option|4|/option||data|10;20;12;24;|data|
+|option|4|/option||data|192.168.1.1:20000;192.168.1.2:24000;|data|

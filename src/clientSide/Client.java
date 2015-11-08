@@ -15,7 +15,7 @@ public class Client {
 	//String serverIP;
 	//int serverPort;
 	private Socket socketToVideoServer;
-	private HashMap<Integer, Integer> videoID;
+	private HashMap<Integer, Integer> videoID = new HashMap<Integer, Integer>();
 	
 	Client(String serverIP, int port){
 		//*this.serverIP = serverIP;
@@ -144,8 +144,10 @@ public class Client {
 			}
 			//sendMesssageOn(socketToVideoServer, preparePayLoad(3, id.toString()));
 			sendMesssageOn(socketToVideoServer, new Packet(3, id.toString()).getPayload());
-			String opttion4message = this.receiveMessageOn(socketToVideoServer);
-			ArrayList<Peer> peers = getPeersFromOption4Message(opttion4message);
+			
+			Packet option4packet = new Packet(receiveMessageOn(socketToVideoServer));
+			
+			ArrayList<Peer> peerList = getPeersFromOption4packet(option4packet);
 			
 			//
 			// start_video_while collating packets
@@ -156,17 +158,24 @@ public class Client {
 		
 	}
 	
-	ArrayList<Peer> getPeersFromOption4Message(String option4message){
+	ArrayList<Peer> getPeersFromOption4packet(Packet option4packet){
 		try{
-			if(option4message.contains("4")==false)
+			if(option4packet.option!=4)
 				throw new Exception("Message received as Option 4, is not option 4 message. Exiting");
+			ArrayList<Peer> listOfPeers = new ArrayList<Peer> ();
+			//create array list
+			String[] peerList= option4packet.data.split(";");
+			for (int i = 0; i < peerList.length; i++)
+			{	
+				String[] peerDetails= peerList[i].split(":");
+				//System.out.println(Arrays.toString(peerDetails));
+				listOfPeers.add(new Peer(peerDetails[0],Integer.parseInt(peerDetails[1])));
+				
+			}	
 			
 			
-			//
 			
-			///
-			
-			return null;
+			return listOfPeers;
 		}
 		catch(Exception e){
 			if(e.getMessage().contains("Message received as Option 4"))
@@ -188,7 +197,7 @@ public class Client {
 			//System.out.println(Arrays.toString(list));
 		   
 			System.out.println(".............Video Details................");
-			System.out.println("Option\t\t Video title\t\t No. of chunks \t      Format");
+			System.out.println("Sr. No\t\t Video title\t\t No. of chunks \t      Format");
 			for (int i = 0; i < list.length; i++)
 			{ 
 				//System.out.println(list[i]);
@@ -197,10 +206,9 @@ public class Client {
 				StringBuffer s = new StringBuffer(videoDetails[1]);
 				s.append("                    ");
 				String title = s.substring(0, 20);
-			   System.out.println(videoDetails[0]+"\t\t"+title+"\t\t"+videoDetails[2]+"\t\t"+videoDetails[3]);
-					
-	
-				
+			   System.out.println((i+1)+"\t\t"+title+"\t\t"+videoDetails[2]+"\t\t"+videoDetails[3]);
+			   
+			   videoID.put(i+1,Integer.parseInt(videoDetails[0]));
 				
 			}
 		
@@ -218,8 +226,9 @@ public class Client {
 //new Client("",0);
 		//int i = Integer.parseInt(null);
 		
-		//Packet p = new Packet("|option|2|/option||data|1,Intro to Algos,8,mp3;2,Intro to networks,5,mp4;3,Intro to AI,6,mp4|data|");
+		//Packet p = new Packet("|option|4|/option||data|192.168.1.1:20000;192.168.1.2:24000;|data|");
 		//System.out.println(p);
-		//printVideoList(p);
+		//System.out.println(getPeersFromOption4packet(p));
+		
 	}
 }
