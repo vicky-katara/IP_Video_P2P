@@ -28,7 +28,8 @@ public class Server implements Runnable {
 				 BufferedReader clientData = new BufferedReader(new InputStreamReader(client.getInputStream()));
 				 PrintStream pw = new PrintStream(client.getOutputStream());
 				 String Data = clientData.readLine();
-				 Packet OpPacket = new Packet(Data);
+				 Packet OpPacket = new Packet();
+				 OpPacket.returnOptionAndData(Data);
 				 clientList clientObject = new clientList(client);
 				 
 				 try { 
@@ -43,10 +44,14 @@ public class Server implements Runnable {
 							  pw.println(obj.returnMenu()); // sends videomenu through the socket to client
 							  
 						  }
-						  else if (OpPacket.option == 3)
+						  else if (OpPacket.option == 4)
 						  {
 							  // extract the videoID from the option and check for the peers which have the video and send the list of peers which have that video
 							  //data_splitting(OpPacket);
+							  int videoID = Integer.parseInt(OpPacket.data);
+							  VideoClient videoObject = new VideoClient();
+							  String peers = videoObject.getPeers(videoID);
+							  
 						  }
 						
 					 	  else{

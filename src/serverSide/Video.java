@@ -9,7 +9,7 @@ public class Video {
 	String videoTitle, format;
 	static int videoIDCount = 0;
 	static ArrayList<Video> videoList=new ArrayList<Video>();
-
+	
 	public String toString()
 	{
 		return videoID+","+videoTitle+","+numChunks+","+format;
@@ -66,5 +66,6 @@ public class Video {
 	{
 		Video2("intro to algos:8;intro to ai:4",3);
 	}
+	
 	
 }
