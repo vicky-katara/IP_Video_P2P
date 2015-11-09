@@ -7,7 +7,6 @@ import java.io.*;
 
 public class Server implements Runnable {
 	public Socket client;
-	private static int countID;
 	public static List<String> table = new ArrayList<>();
 
 	public Server(Socket peer) {
@@ -30,15 +29,13 @@ public class Server implements Runnable {
 				 PrintStream pw = new PrintStream(client.getOutputStream());
 				 String Data = clientData.readLine();
 				 Packet OpPacket = new Packet(Data);
-				 InetAddress address = client.getInetAddress();	// get ip address of client(i.e address to which the socket is connected)
-				 System.out.println("IP address of client : " + address.toString()); // to test 
-				 int port = client.getPort();  // GET Port number to which socket is connected for test purposes only
-				 System.out.println("Port address on which client is connected :" + port);
-				 countID++;
+				 clientList clientObject = new clientList(client);
+				 
 				 try { 
 					 	  if (OpPacket.option == 0) 
 					  {
-						  Video V = new Video(OpPacket.data,countID);
+					 	  int clientID = clientObject.getClientID();
+						  Video V = new Video(OpPacket.data,clientID);
 					  }
 						  else if (OpPacket.option == 1)
 						  {
@@ -51,7 +48,8 @@ public class Server implements Runnable {
 							  // extract the videoID from the option and check for the peers which have the video and send the list of peers which have that video
 							  //data_splitting(OpPacket);
 						  }
-						  else {
+						
+					 	  else{
 							  throw new Exception();
 						  }
 					 
@@ -67,22 +65,6 @@ public class Server implements Runnable {
 						 // yet to insert 
 						System.out.println("Error while connecting to Server");
 					 }
-					
-			//PrintStream pw = new PrintStream(client.getOutputStream());
-
-			InetAddress address = client.getInetAddress(); // get ip address of
-															// client(i.e
-															// address to which
-															// the socket is
-															// connected)
-			System.out.println("IP address of client : " + address.toString()); // to
-																				// test
-			int port = client.getPort(); // GET Port number to which socket is
-											// connected for test purposes only
-
-			System.out.println("Port address on which client is connected :" + port);
-			countID++;
-
 		} 
 
 
