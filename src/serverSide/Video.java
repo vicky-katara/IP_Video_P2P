@@ -10,6 +10,11 @@ public class Video {
 	static int videoIDCount = 0;
 	static ArrayList<Video> videoList=new ArrayList<Video>();
 	
+	Video()
+	{
+		//default constructor
+	}
+	
 	public String toString()
 	{
 		return videoID+","+videoTitle+","+numChunks+","+format;

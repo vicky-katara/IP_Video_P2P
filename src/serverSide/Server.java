@@ -32,10 +32,13 @@ public class Server implements Runnable {
 					 	  int clientID = clientObject.getClientID();
 						  Video V = new Video(OpPacket.data,clientID);
 					  }
-						  else if (OpPacket.option == 1)
+						  else if (OpPacket.option == 2)
 						  {
 							  // sends videomenu through the socket to client
-							  
+							  Video videoObj = new Video();
+							  String videoList;
+							  videoList = videoObj.returnVideolist();
+							  pw.println(videoList);
 						  }
 						  else if (OpPacket.option == 4)
 						  {
