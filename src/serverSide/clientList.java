@@ -12,6 +12,11 @@ public class clientList {
 	int clientPort;
 	static ArrayList<clientList> clientList=new ArrayList<clientList>();
 	
+	public clientList()
+	{
+		//default constructor
+	}
+	
 	public clientList(Socket client)
 	{
 		this.clientIPAddress = client.getInetAddress();	// get ip address of client(i.e address to which the socket is connected) 
@@ -19,6 +24,11 @@ public class clientList {
 		countID++;
 		this.clientID = countID;
 		clientList.add(this);
+	}
+	
+	public ArrayList<clientList> getclientList()
+	{
+		return clientList;
 	}
 	
 	public int getClientID()
