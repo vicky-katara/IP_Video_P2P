@@ -66,6 +66,10 @@ public class Video {
 		Video2("intro to algos:8;intro to ai:4",3);
 	}
 	
+	public String returnVideolist()
+	{	return videoList.toString();
+	}
+	
 	public static void main(String[] args)
 	{
 		Video v = new Video("intro to algos:8;intro to ai:4",3);

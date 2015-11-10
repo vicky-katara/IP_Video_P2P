@@ -5,6 +5,11 @@ import java.util.Arrays;
 
 public class Wrapper {
 	
+	/**
+	 * Data splitting splits the message and gives option,
+	 * port number and list of videos.
+	 * @param clientData
+	 */
 	public static void data_splitting(String clientData)
 	{
 		String str = clientData;
