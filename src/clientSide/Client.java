@@ -21,9 +21,11 @@ public class Client {
 		//*this.serverIP = serverIP;
 		//this.serverPort = port;
 		
+		System.out.println("Connecting to server at "+serverIP+":"+port);
+		
 		//Start Receiver Thread which will intercept request messages
 		
-		//socketToVideoServer = returnSocketTo(serverIP, port);// connect to server
+		socketToVideoServer = returnSocketTo(serverIP, port);// connect to server
 		
 		// get list of files in user.home/videos
 		String pathToVideosDir = System.getProperty("user.home")+"\\Videos";
@@ -226,7 +228,8 @@ public class Client {
 	}
 	
 	public static void main(String[] args)throws IOException {
-		Client c =new Client("",0);
+		String[] connectionInfo = new URLReader().getConnectionString().split(":");;
+		Client c =new Client(connectionInfo[0],Integer.parseInt(connectionInfo[1]));
 		new Receiver(c.receiverPortNumber).start();
 		//int i = Integer.parseInt(null);
 		

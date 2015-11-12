@@ -51,13 +51,14 @@ public class Server implements Runnable {
 						  }
 						
 					 	  else{
-							  throw new Exception();
+							  throw new Exception(); //put message here
 						  }
 					 
 					 
 				 	}
 					 catch(Exception E){
 						 System.out.println("Invalid Option");
+						 E.printStackTrace();
 					 }
 				 
 					 }
@@ -65,6 +66,7 @@ public class Server implements Runnable {
 					 {
 						 // yet to insert 
 						System.out.println("Error while connecting to Server");
+						e.printStackTrace();
 					 }
 		} 
 
@@ -72,9 +74,17 @@ public class Server implements Runnable {
 
 	public static void main(String[] args) throws IOException {
 
-		ServerSocket regser = new ServerSocket(65423);
+		int serverPort = 65423; // changed by me
+		ServerSocket regser = new ServerSocket(serverPort);
 		Socket connectionSocket;
-
+		
+		/* Making Changes here - Vicky */
+		
+		InetAddress ipAddr = InetAddress.getLocalHost();
+		new UploadToServer().upload(ipAddr.getHostAddress(), serverPort);
+		
+		/* Awesome stuff over! */
+		
 		System.out.println("Server Started!!");
 
 		while (true) {
