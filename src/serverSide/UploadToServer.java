@@ -84,8 +84,7 @@ public class UploadToServer {
             session.disconnect();
             System.out.println("Host Session disconnected.");
         }
-    }   
-	
+    }
 	public static void main(String[] args) {
 		//send("server.txt");
 		//read("http://www4.ncsu.edu/~vpkatara/server.txt");

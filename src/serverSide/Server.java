@@ -74,8 +74,8 @@ public class Server implements Runnable {
 
 	public static void main(String[] args) throws IOException {
 
-		int serverPort = 65423; // changed by me
-		ServerSocket regser = new ServerSocket(serverPort);
+		int serverPort = 65423; // changed by Vicky
+		ServerSocket regser = new ServerSocket(serverPort); // changed by Vicky
 		Socket connectionSocket;
 		
 		/* Making Changes here - Vicky */
