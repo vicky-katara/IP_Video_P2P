@@ -1,8 +1,11 @@
 package serverSide;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -69,6 +72,12 @@ public class UploadToServer {
             //channelSftp.cd(SFTPWORKINGDIR);
             channelSftp.cd("www");
             File f = new File(fileName);
+            if(f.exists()==false)
+            	throw new Exception("server.txt not found");
+            else{
+            	BufferedReader br = new BufferedReader(new FileReader(f));
+            	System.out.println("server.txt contains "+br.readLine()+". Uploading..." );
+            }
             channelSftp.put(new FileInputStream(f), f.getName());
             System.out.println("File transfered successfully to host.");
         } catch (Exception ex) {
@@ -76,7 +85,6 @@ public class UploadToServer {
              ex.printStackTrace();
         }
         finally{
-
             channelSftp.exit();
             System.out.println("sftp Channel exited.");
             channel.disconnect();

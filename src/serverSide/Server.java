@@ -85,7 +85,7 @@ public class Server implements Runnable {
 		
 		/* Awesome stuff over! */
 		
-		System.out.println("Server Started!!");
+		System.out.println("Server Started!! at "+ipAddr.getLocalHost()+":"+serverPort);
 
 		while (true) {
 			connectionSocket = regser.accept(); // listening to a new client
