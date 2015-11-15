@@ -80,12 +80,13 @@ public class Server implements Runnable {
 		
 		/* Making Changes here - Vicky */
 		
-		InetAddress ipAddr = InetAddress.getLocalHost();
-		new UploadToServer().upload(ipAddr.getHostAddress(), serverPort);
+		String ipAddress = NetworkAddress.getIPAddress("enp0s8");
+		
+		new UploadToServer().upload(ipAddress, serverPort);
 		
 		/* Awesome stuff over! */
 		
-		System.out.println("Server Started!! at "+ipAddr.getLocalHost()+":"+serverPort);
+		System.out.println("Server Started!! at "+ipAddress+":"+serverPort);
 
 		while (true) {
 			connectionSocket = regser.accept(); // listening to a new client
