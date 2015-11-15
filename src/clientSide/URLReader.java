@@ -21,7 +21,7 @@ public class URLReader {
 		URL oracle = new URL(url);
         BufferedReader in = new BufferedReader(
         new InputStreamReader(oracle.openStream()));
-        System.out.println("/n/n/nReading connection String from "+url);
+        System.out.println("\n\nReading connection String from "+url);
         String inputLine;
         while ((inputLine = in.readLine()) != null)
             ret = inputLine;

@@ -31,6 +31,6 @@ public class ListFiles
 		  return arr;
 	}
 	public static void main(String[] args) {
-		System.out.println(returnListOfFilesInDirectory(System.getProperty("user.home")+"\\Videos"));
+		System.out.println(returnListOfFilesInDirectory(System.getProperty("user.home")+File.separatorChar+"Videos"));
 	}
 }
