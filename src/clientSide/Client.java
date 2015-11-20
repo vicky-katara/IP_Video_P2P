@@ -28,7 +28,7 @@ public class Client {
 		socketToVideoServer = returnSocketTo(serverIP, port);// connect to server
 		
 		// get list of files in user.home/videos
-		String pathToVideosDir = System.getProperty("user.home")+"\\Videos";
+		String pathToVideosDir = System.getProperty("user.home")+File.separatorChar+"Videos";
 		ArrayList<File> listOfFiles = ListFiles.returnListOfFilesInDirectory(pathToVideosDir);
 		
 		//prepare list of video file names
