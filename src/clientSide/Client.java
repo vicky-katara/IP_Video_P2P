@@ -165,11 +165,11 @@ public class Client {
 	
 	ArrayList<Peer> getPeersFromOption4packet(Packet option4packet){
 		try{
-			if(option4packet.option!=4)
+			if(option4packet.getOption()!=4)
 				throw new Exception("Message received as Option 4, is not option 4 message. Exiting");
 			ArrayList<Peer> listOfPeers = new ArrayList<Peer> ();
 			//create array list
-			String[] peerList= option4packet.data.split(";");
+			String[] peerList= option4packet.getData().split(";");
 			for (int i = 0; i < peerList.length; i++)
 			{	
 				String[] peerDetails= peerList[i].split(":");
@@ -194,9 +194,9 @@ public class Client {
 	
 	void  printVideoList(Packet videosPacket){ //Also populate the HashMap videos with (index, videoID) format.
 		try{
-			if(videosPacket.option!=2)
+			if(videosPacket.getOption()!=2)
 				throw new Exception("Message received as Option 2, is not option 2 message. Exiting");
-			String videoData = videosPacket.data;
+			String videoData = videosPacket.getData();
 			
 			String[] list=videoData.split(";");
 			//System.out.println(Arrays.toString(list));

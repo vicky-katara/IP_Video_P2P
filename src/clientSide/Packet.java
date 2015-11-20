@@ -3,15 +3,23 @@ package clientSide;
 import java.util.Arrays;
 
 public class Packet {
-	int option;
-	String data;
+	private int option;
+	private String data;
 	
-	Packet(int option, String data){
+	public Packet(int option, String data){
 		this.option = option;
 		this.data = data;
 	}
 	
-	Packet(String payload){
+	public int getOption(){
+		return this.option;
+	}
+	
+	public String getData(){
+		return this.data;
+	}
+	
+	public Packet(String payload){
 		String[] arr = payload.split("\\|");
 		//System.out.println(Arrays.toString(arr));
 		this.option = Integer.parseInt(arr[2]);
@@ -22,7 +30,7 @@ public class Packet {
 		return option+":"+data;
 	}
 	
-	String getPayload(){
+	public String getPayload(){
 		return "|option|"+option+"|/option||data|"+data+"|data|";
 	}
 	

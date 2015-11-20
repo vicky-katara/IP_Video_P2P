@@ -1,9 +1,12 @@
 package serverSideNew;
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import clientSide.Packet;
 
 public class Server implements Runnable {
 
@@ -14,19 +17,29 @@ public class Server implements Runnable {
 	}
 	
 	public void run() {
-		try {
-	         PrintStream pstream = new PrintStream
-	         (csocket.getOutputStream());
-	         for (int i = 100; i >= 0; i--) {
-	            pstream.println(i + 
-	            " bottles of beer on the wall");
-	         }
-	         pstream.close();
-	         csocket.close();
-	      }
-	      catch (IOException e) {
-	         System.out.println(e);
-	      }
+		while(true){
+			Packet receivedPacket = new Packet(receiveMessageOn(csocket));
+			switch(receivedPacket.getOption()){
+				case 0:
+					
+					break;
+			}
+		}
+	}
+	
+	String receiveMessageOn(Socket socket){
+		try{
+			if(socket.isClosed())
+				throw new Exception("receiveMessageOn:"+socket.toString()+" is closed. Cannot continue");
+			DataInputStream dis = new DataInputStream(socket.getInputStream());
+			return dis.readUTF();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			if(e.getMessage().contains("receiveMessageOn"))
+				System.exit(12); // exit 12 --> client to video Server abnormally disconnected
+			return "No reply received";
+		}
 	}
 	
 	public static void main(String args[]) 
