@@ -1,5 +1,6 @@
 package serverSideNew;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 
 
@@ -36,6 +37,7 @@ public class ClientVideoDatabase {
 		clv.storeAllVideosOfClient(new Client("192.168.2.1:4000"), "men in black2:9;avatar:6;men in black:4");
 		System.out.println(clv.returnAllVideos());
 		System.out.println(clv.fetchListOfClientsHavingVideo(1));
+		//System.out.println(InetAddress.getLocalHost().getHostAddress());
 	}
 	
 }

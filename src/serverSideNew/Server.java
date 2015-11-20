@@ -18,7 +18,7 @@ public class Server implements Runnable {
 	static ClientVideoDatabase database = new ClientVideoDatabase();
 	Server(Socket csocket) {
 		this.csocket = csocket;
-		System.out.println("New thread "+Thread.currentThread().getId()+" started to service "+csocket.getInetAddress()+":"+csocket.getPort());
+		System.out.println("New thread "+Thread.currentThread().getId()+" started to service "+csocket.getInetAddress().getHostAddress()+":"+csocket.getPort());
 	}
 	
 	public void run() {
@@ -27,14 +27,14 @@ public class Server implements Runnable {
 			System.out.println("Option "+receivedPacket.getOption()+" - "+receivedPacket.getData()+" received!");
 			switch(receivedPacket.getOption()){
 				case 0:
-					System.out.println("From: "+csocket.getInetAddress()+":");
+					System.out.println("From: "+csocket.getInetAddress().getHostAddress()+":");
 					String[] breakUp = receivedPacket.getData().split("::");
 					try{
 						if(breakUp.length!=2){
 							System.out.println(Arrays.toString(breakUp));
 							throw new Exception("Packet 0 not in expected format:"+receivedPacket);
 						}
-						Server.database.storeAllVideosOfClient(new Client(csocket.getInetAddress()+":"+breakUp[0]), breakUp[1]);
+						Server.database.storeAllVideosOfClient(new Client(csocket.getInetAddress().getHostAddress()+":"+breakUp[0]), breakUp[1]);
 						
 						// no reply sent
 						break;
