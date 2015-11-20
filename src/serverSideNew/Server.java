@@ -7,6 +7,7 @@ import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
 import commonLibrary.Packet;
 import commonLibrary.SenderReceiver;
@@ -29,8 +30,10 @@ public class Server implements Runnable {
 					System.out.println("From: "+csocket.getInetAddress()+":");
 					String[] breakUp = receivedPacket.getData().split(":");
 					try{
-						if(breakUp.length!=2)
+						if(breakUp.length!=2){
+							System.out.println(Arrays.toString(breakUp));
 							throw new Exception("Packet 0 not in expected format:"+receivedPacket);
+						}
 						Server.database.storeAllVideosOfClient(new Client(csocket.getInetAddress()+":"+breakUp[0]), breakUp[1]);
 						
 						// no reply sent
