@@ -1,4 +1,4 @@
-package clientSide;
+package commonLibrary;
 
 import java.util.Arrays;
 

@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import commonLibrary.Packet;
+import commonLibrary.SenderReceiver;
+
 public class Client {
 	
 	//String serverIP;
@@ -75,7 +78,7 @@ public class Client {
 //		return "|option|"+option+"|/option||data|"+data+"|data|";
 //	}
 	
-	void sendMesssageOn(Socket socket, String payload){
+	/*void sendMesssageOn(Socket socket, String payload){
 		try{
 			if(socket.isClosed())
 				throw new Exception("sendMesssageOn:"+socket.toString()+" is closed. Cannot continue");
@@ -104,7 +107,7 @@ public class Client {
 				System.exit(12); // exit 12 --> client to video Server abnormally disconnected
 			return "No reply received";
 		}
-	}
+	}*/
 	
 	void interact(){
 		Scanner scan = new Scanner(System.in);
@@ -116,8 +119,8 @@ public class Client {
 				return;
 			case 1: //String getVideoListPayload = preparePayLoad(1, "");
 				String getVideoListPayload = new Packet(1, "").getPayload();
-				sendMesssageOn(socketToVideoServer, getVideoListPayload);
-				Packet videosPacket = new Packet(receiveMessageOn(socketToVideoServer));
+				new SenderReceiver().sendMesssageOn(socketToVideoServer, getVideoListPayload);
+				Packet videosPacket = new Packet(new SenderReceiver().receiveMessageOn(socketToVideoServer));
 				printVideoList(videosPacket);
 				askUserForVideo();
 				break;
@@ -148,9 +151,9 @@ public class Client {
 				continue;
 			}
 			//sendMesssageOn(socketToVideoServer, preparePayLoad(3, id.toString()));
-			sendMesssageOn(socketToVideoServer, new Packet(3, id.toString()).getPayload());
+			new SenderReceiver().sendMesssageOn(socketToVideoServer, new Packet(3, id.toString()).getPayload());
 			
-			Packet option4packet = new Packet(receiveMessageOn(socketToVideoServer));
+			Packet option4packet = new Packet(new SenderReceiver().receiveMessageOn(socketToVideoServer));
 			
 			ArrayList<Peer> peerList = getPeersFromOption4packet(option4packet);
 			

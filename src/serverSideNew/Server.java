@@ -7,7 +7,9 @@ import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import clientSide.Packet;
+
+import commonLibrary.Packet;
+import commonLibrary.SenderReceiver;
 
 public class Server implements Runnable {
 
@@ -20,7 +22,7 @@ public class Server implements Runnable {
 	
 	public void run() {
 		while(true){
-			Packet receivedPacket = new Packet(receiveMessageOn(csocket));
+			Packet receivedPacket = new Packet(new SenderReceiver().receiveMessageOn(csocket));
 			System.out.println("Option "+receivedPacket.getOption()+" - "+receivedPacket.getData()+" received!");
 			switch(receivedPacket.getOption()){
 				case 0:
@@ -37,18 +39,18 @@ public class Server implements Runnable {
 				case 1:
 					Packet toBeSent2 = new Packet(2, Server.database.returnAllVideos());
 					System.out.println("Sending Option 2 reply"+toBeSent2);
-					sendMesssageOn(csocket, toBeSent2.getPayload());
+					new SenderReceiver().sendMesssageOn(csocket, toBeSent2.getPayload());
 					break;
 				case 3:
 					int videoID = Integer.parseInt(receivedPacket.getData());
 					Packet toBeSent4 = new Packet(4, Server.database.fetchListOfClientsHavingVideo(videoID));
 					System.out.println("Sending Option 4 reply"+toBeSent4);
-					sendMesssageOn(csocket, toBeSent4.getPayload());
+					new SenderReceiver().sendMesssageOn(csocket, toBeSent4.getPayload());
 			}
 		}
 	}
 	
-	String receiveMessageOn(Socket socket){
+/*	String receiveMessageOn(Socket socket){
 		try{
 			if(socket.isClosed())
 				throw new Exception("receiveMessageOn:"+socket.toString()+" is closed. Cannot continue");
@@ -77,7 +79,7 @@ public class Server implements Runnable {
 			if(e.getMessage().contains("sendMessageOn"))
 				System.exit(11); // exit 11 --> client to video Server abnormally disconnected
 		}
-	}
+	}*/
 	
 	public static void main(String args[]) 
 	   throws Exception {
