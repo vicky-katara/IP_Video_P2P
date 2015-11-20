@@ -51,6 +51,10 @@ public class VideoList {
 		return ret.toString();
 	}
 	
+	public String toString(){
+		return this.getComplete();
+	}
+	
 	public static void main(String[] args) {
 		VideoList v = new VideoList();
 //		System.out.println(v.addAndReturnID(new Video("men in black:5")));
