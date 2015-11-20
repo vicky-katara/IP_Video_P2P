@@ -111,28 +111,30 @@ public class Client {
 	
 	void interact(){
 		Scanner scan = new Scanner(System.in);
-		while(true){
-			printMainMenu();
-			int input = scan.nextInt();
-			switch(input){
-			case 0: System.out.println("Thank you for watching! Paying for movies is too mainstream! :P");
-				return;
-			case 1: //String getVideoListPayload = preparePayLoad(1, "");
-				String getVideoListPayload = new Packet(1, "").getPayload();
-				new SenderReceiver().sendMesssageOn(socketToVideoServer, getVideoListPayload);
-				Packet videosPacket = new Packet(new SenderReceiver().receiveMessageOn(socketToVideoServer));
-				printVideoList(videosPacket);
-				askUserForVideo();
-				break;
-			case 2:
+		try{
+			while(true){
+				printMainMenu();
+				int input = scan.nextInt();
+				switch(input){
+				case 0: System.out.println("Thank you for watching! Paying for movies is too mainstream! :P");
+					socketToVideoServer.close();
+					return;
+				case 1: //String getVideoListPayload = preparePayLoad(1, "");
+					String getVideoListPayload = new Packet(1, "").getPayload();
+					new SenderReceiver().sendMesssageOn(socketToVideoServer, getVideoListPayload);
+					Packet videosPacket = new Packet(new SenderReceiver().receiveMessageOn(socketToVideoServer));
+					printVideoList(videosPacket);
+					askUserForVideo();
+					break;
+				}
 			}
-		}
+		}catch(Exception e){e.printStackTrace();}
 	}
 	
 	void printMainMenu(){
 		System.out.println("---------------------------------------------------------------\n-----------------------------Menu------------------------------");
 		System.out.println("\t1. View List of Movies available with the swarm");
-		System.out.println("\t2. View List of Local Movies");
+		//System.out.println("\t2. View List of Local Movies");
 		System.out.println("\t0. Exit");
 		System.out.println("---------------------------------------------------------------");
 		System.out.print("Enter Option: ");
@@ -160,8 +162,10 @@ public class Client {
 			//
 			// start_video_while collating packets
 			//
-			
-			
+			System.out.println("Trying to get videoStream from these peers:"+peerList);
+			//call receiver passing list of peers
+			//EXITing CLIENT SERVER
+			break;
 		}
 		
 	}
