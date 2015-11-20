@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="External Libraries/jsch-0.1.53.jar"/>
-	<classpathentry kind="lib" path="/home/servo/workspace/IP_Video_P2P/External Libraries/jsch-0.1.53.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin1"/>
 </classpath>
