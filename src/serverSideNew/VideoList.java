@@ -63,7 +63,4 @@ public class VideoList {
 		System.out.println(v.getComplete());
 		System.out.println(v.getClientsWhoHaveVideo(3));
 	}
-	
-	
-	
 }

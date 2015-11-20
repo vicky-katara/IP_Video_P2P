@@ -14,7 +14,12 @@ public class Client {
 		this.ID = ID;
 	}
 	
-	Client(String IPAddress, int portNumber){
+	Client(String unformatted){ // only comparison
+		this.IPAddress = unformatted.split(":")[0];
+		this.portNumber = Integer.parseInt(unformatted.split(":")[1]);
+	}
+	
+	Client(String IPAddress, int portNumber){ // only comparison;
 		this.IPAddress = IPAddress;
 		this.portNumber = portNumber;
 		this.ID = -1;
