@@ -38,7 +38,9 @@ public class Server implements Runnable {
 					}catch(Exception e){System.out.println("Exception raised in class Server: "); e.printStackTrace();}
 				case 1:
 					Packet toBeSent2 = new Packet(2, Server.database.returnAllVideos());
-					System.out.println("Sending Option 2 reply"+toBeSent2);
+					if(toBeSent2.getData()==null)
+						System.out.println("Server.database.returnAllVideos() returned empty:"+toBeSent2.getData());
+					System.out.println("Sending Option 2 reply to "+toBeSent2);
 					new SenderReceiver().sendMesssageOn(csocket, toBeSent2.getPayload());
 					break;
 				case 3:
