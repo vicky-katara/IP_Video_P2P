@@ -19,7 +19,7 @@ Example:
 
 Option 3:  client chooses Video and requests for the video from server by sending VideoID
 
-Example :  |option|3|/option||data|VideoID|data|
+Example :  |option|3|/option||data|7|data|
 
 Option 4: Server responds with a list of peers
 The server sends a list of active peers to the client.

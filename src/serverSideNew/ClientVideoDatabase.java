@@ -13,7 +13,7 @@ public class ClientVideoDatabase {
 		videoList = new VideoList();
 	}
 	
-	void storeAllVideosOfClient(Client c, String unformattedList){
+	synchronized void storeAllVideosOfClient(Client c, String unformattedList){
 		int clientID = clientList.addAndReturnID(c);
 		videoList.addAllAndAttachClient(unformattedList, clientID);
 	}
