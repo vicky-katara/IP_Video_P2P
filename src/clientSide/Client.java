@@ -38,9 +38,9 @@ public class Client {
 		String fileInfo = getConcatenatedFileInfo(listOfFiles);
 		String videoListPayload = new Packet(0, this.receiverPortNumber+":"+fileInfo).getPayload();//preparePayLoad(0, fileInfo); // FileNames is Option 0:
 		
-		System.out.println(videoListPayload);
+		System.out.println("videoListPayload packet:"+videoListPayload);
 		// send list of videos to server
-		//sendMesssageOn(socketToVideoServer, videoListPayload);
+		new SenderReceiver().sendMesssageOn(socketToVideoServer, videoListPayload);
 		interact();
 		//closeSocketToServer(socketToVideoServer);
 		
@@ -198,9 +198,10 @@ public class Client {
 	void  printVideoList(Packet videosPacket){ //Also populate the HashMap videos with (index, videoID) format.
 		try{
 			if(videosPacket.getOption()!=2)
-				throw new Exception("Message received as Option 2, is not option 2 message. Exiting");
+				throw new Exception("printVideoList():Message received as Option 2, is not option 2 message. Exiting");
 			String videoData = videosPacket.getData();
-			
+			if(videosPacket.getData().length()<=2)
+				throw new Exception("printVideoList():No data received in videos packet!"+videosPacket.getData());
 			String[] list=videoData.split(";");
 			//System.out.println(Arrays.toString(list));
 		   
@@ -215,13 +216,8 @@ public class Client {
 				s.append("                    ");
 				String title = s.substring(0, 20);
 			   System.out.println((i+1)+"\t\t"+title+"\t\t"+videoDetails[2]+"\t\t"+videoDetails[3]);
-			   
 			   videoID.put(i+1,Integer.parseInt(videoDetails[0]));
-				
 			}
-		
-		
-			
 		}
 		catch(Exception e){
 			if(e.getMessage().contains("Message received as Option 2"))
