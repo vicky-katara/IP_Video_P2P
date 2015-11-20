@@ -28,7 +28,7 @@ public class Server implements Runnable {
 			switch(receivedPacket.getOption()){
 				case 0:
 					System.out.println("From: "+csocket.getInetAddress()+":");
-					String[] breakUp = receivedPacket.getData().split(":");
+					String[] breakUp = receivedPacket.getData().split("::");
 					try{
 						if(breakUp.length!=2){
 							System.out.println(Arrays.toString(breakUp));

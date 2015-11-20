@@ -36,7 +36,7 @@ public class Client {
 		
 		//prepare list of video file names
 		String fileInfo = getConcatenatedFileInfo(listOfFiles);
-		String videoListPayload = new Packet(0, this.receiverPortNumber+":"+fileInfo).getPayload();//preparePayLoad(0, fileInfo); // FileNames is Option 0:
+		String videoListPayload = new Packet(0, this.receiverPortNumber+"::"+fileInfo).getPayload();//preparePayLoad(0, fileInfo); // FileNames is Option 0:
 		
 		System.out.println("videoListPayload packet:"+videoListPayload);
 		// send list of videos to server
