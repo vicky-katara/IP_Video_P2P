@@ -17,30 +17,38 @@ public class VideoList {
 		count = 0;
 	}
 	
-	int addAndReturnID(Video v){
+	ArrayList<Integer> getClientsWhoHaveVideo(int videoID){
+		return videoList.get(videoID).clientIDList;
+	}
+	
+	void addAndAttachClient(Video v, int clientID){
 		if(videoList.containsValue(v)){
 			for (Entry<Integer, Video> entry : videoList.entrySet()) // horrible efficiency
 	            if (entry.getValue().equals(v))
-	                return entry.getKey();
-			return Integer.MIN_VALUE;
+	                entry.getValue().addClient(clientID);
 		}
 		else{
-			Video newVideo = new Video(++count, v.videoTitle, v.numChunks);
+			Video newVideo = new Video(++count, v.videoTitle, v.numChunks, clientID);
 			videoList.put(newVideo.videoID, newVideo);
-			return newVideo.videoID;
 		}
 	}
 	
-	ArrayList<Integer> addAllAndReturnAllID(String unformattedList){
+	void addAllAndAttachClient(String unformattedList, int ownerID){
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		String[] unformattedArray = unformattedList.split(";");
 		for(int i=0; i<unformattedArray.length;i++)
-			list.add(addAndReturnID(new Video(unformattedArray[i])));
-		return list;
+			addAndAttachClient(new Video(unformattedArray[i]), ownerID);
 	}
 	
 	String get(){
 		return videoList.values().toString().replace("[","").replace("]", "").replace(", ", ";");
+	}
+	
+	String getComplete(){
+		StringBuffer ret = new StringBuffer();
+		for(Entry<Integer, Video> entry : videoList.entrySet())
+			ret.append(entry.getValue().completeToString());
+		return ret.toString();
 	}
 	
 	public static void main(String[] args) {
@@ -50,8 +58,10 @@ public class VideoList {
 //		System.out.println(v.addAndReturnID(new Video("avatar:7")));
 //		System.out.println("should return some value:"+v.addAndReturnInteger(new Video("men in black:5")));
 //		System.out.println(v.get());
-		System.out.println(v.addAllAndReturnAllID("men in black:4;avatar:6;men in black2:3"));
-		System.out.println(v.addAllAndReturnAllID("men in black:2;avatar:6;men in black2:3"));
+		v.addAllAndAttachClient("men in black:4;avatar:6;men in black2:3", 5);
+		v.addAllAndAttachClient("men in black:2;avatar:6;men in black2:3", 4);
+		System.out.println(v.getComplete());
+		System.out.println(v.getClientsWhoHaveVideo(3));
 	}
 	
 	
