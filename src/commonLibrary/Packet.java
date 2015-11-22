@@ -1,7 +1,5 @@
 package commonLibrary;
 
-import java.util.Arrays;
-
 public class Packet {
 	private int option;
 	private String data;

@@ -1,7 +1,6 @@
 package clientSide;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 public class ListFiles 
@@ -20,7 +19,7 @@ public class ListFiles
 			  System.exit(0);
 		  }
 		  
-		  ArrayList<File> arr = new ArrayList();
+		  ArrayList<File> arr = new ArrayList<File>();
 		  File[] listOfFiles = folder.listFiles();
 		  
 		  for (int i = 0; i < listOfFiles.length; i++){

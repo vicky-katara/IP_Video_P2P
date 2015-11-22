@@ -1,21 +1,11 @@
 package serverSideNew;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.net.NetworkInterface;
-
 import com.jcraft.jsch.*;
 
 public class UploadToServer {
@@ -53,7 +43,6 @@ public class UploadToServer {
         int SFTPPORT = 22;
         String SFTPUSER = "vpkatara";
         String SFTPPASS = "SuperKam@1";
-        String SFTPWORKINGDIR = "";
 
         Session session = null;
         Channel channel = null;
@@ -80,6 +69,7 @@ public class UploadToServer {
             else{
             	BufferedReader br = new BufferedReader(new FileReader(f));
             	System.out.println("server.txt contains "+br.readLine()+". Uploading..." );
+            	br.close();
             }
             channelSftp.put(new FileInputStream(f), f.getName());
             System.out.println("File transfered successfully to host.");

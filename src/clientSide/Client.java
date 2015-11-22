@@ -1,7 +1,5 @@
 package clientSide;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
@@ -128,7 +126,7 @@ public class Client {
 					break;
 				}
 			}
-		}catch(Exception e){e.printStackTrace();}
+		}catch(Exception e){e.printStackTrace(); scan.close();}
 	}
 	
 	void printMainMenu(){
@@ -167,7 +165,7 @@ public class Client {
 			//EXITing CLIENT SERVER
 			break;
 		}
-		
+		scan.close();
 	}
 	
 	ArrayList<Peer> getPeersFromOption4packet(Packet option4packet){
