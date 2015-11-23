@@ -18,6 +18,7 @@ public class ChunkFetcher extends Thread{
 	PriorityBlockingQueue<Chunk> chunkQueue;
 	
 	ChunkFetcher(Video video, int startNum, int offset, Peer requestReceiver, PriorityBlockingQueue<Chunk> chunkQueue){
+		System.out.println("Starting new ChunkFetcher thread for chunks "+startNum+"+ "+offset+"*k to fetch "+video+ " from "+requestReceiver);
 		this.video = video;
 		this.startNum = startNum;
 		this.offset = offset;
@@ -37,6 +38,17 @@ public class ChunkFetcher extends Thread{
 					e.printStackTrace();
 				}
 			chunkQueue.add(new Chunk(chunkNumber, option101Packet.getData()));
+			while(chunkQueue.size() > 50000)
+				try {
+					wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 		}
 	}
+	
+	public void resumeIfWaiting(){
+		notify();
+	}
+	
 }
