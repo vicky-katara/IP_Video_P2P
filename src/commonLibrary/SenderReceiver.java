@@ -2,6 +2,7 @@ package commonLibrary;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 
 public class SenderReceiver {
@@ -39,6 +40,17 @@ public class SenderReceiver {
 			e.printStackTrace();
 			if(e.getMessage().contains("sendMessageOn"))
 				System.exit(11); // exit 11 --> client to video Server abnormally disconnected
+		}
+	}
+	
+	public Socket returnSocketTo(String serverIP, int serverPort){
+		try{
+		return new Socket(serverIP, serverPort);
+		}
+		catch(IOException e){
+			System.err.println("Error:");
+			e.printStackTrace();
+			return null;
 		}
 	}
 

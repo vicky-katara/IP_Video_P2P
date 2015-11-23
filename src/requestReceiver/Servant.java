@@ -1,4 +1,4 @@
-package clientSide;
+package requestReceiver;
 
 import java.net.Socket;
 

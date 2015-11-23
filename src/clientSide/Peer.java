@@ -4,6 +4,12 @@ import java.net.Socket;
 
 public class Peer {
 	private String ipAddress;
+	public String getIpAddress() {
+		return ipAddress;
+	}
+	public int getPortNumber() {
+		return portNumber;
+	}
 	private int portNumber;
 	Peer(String ipAddress, int portNumber){
 		this.ipAddress = ipAddress;

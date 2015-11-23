@@ -10,6 +10,8 @@ import java.util.Scanner;
 import commonLibrary.Packet;
 import commonLibrary.SenderReceiver;
 import commonLibrary.Video;
+import requestReceiver.RequestReceiver;
+import requestor.Requestor;
 
 public class Client {
 	
@@ -29,7 +31,7 @@ public class Client {
 		
 		//Start Receiver Thread which will intercept request messages
 		
-		socketToVideoServer = returnSocketTo(serverIP, port);// connect to server
+		socketToVideoServer = new SenderReceiver().returnSocketTo(serverIP, port);// connect to server
 		
 		// get list of files in user.home/videos
 		String pathToVideosDir = System.getProperty("user.home")+File.separatorChar+"Videos";
@@ -47,7 +49,7 @@ public class Client {
 		
 	}
 	
-	Socket returnSocketTo(String serverIP, int serverPort){
+	/*Socket returnSocketTo(String serverIP, int serverPort){
 		try{
 		return new Socket(serverIP, serverPort);
 		}
@@ -56,7 +58,7 @@ public class Client {
 			e.printStackTrace();
 			return null;
 		}
-	}
+	}*/
 	
 	void closeSocketToServer(Socket s){
 		try{
@@ -74,41 +76,6 @@ public class Client {
 		}
 		return ret.toString();
 	}
-	
-//	String preparePayLoad(int option, String data){
-//		return "|option|"+option+"|/option||data|"+data+"|data|";
-//	}
-	
-	/*void sendMesssageOn(Socket socket, String payload){
-		try{
-			if(socket.isClosed())
-				throw new Exception("sendMesssageOn:"+socket.toString()+" is closed. Cannot continue");
-
-			System.out.println("Trying to send |"+payload.substring(0, 5)+"...| to "+socket.getInetAddress()+":"+socket.getPort());
-			DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-			dos.writeUTF(payload);
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			if(e.getMessage().contains("sendMessageOn"))
-				System.exit(11); // exit 11 --> client to video Server abnormally disconnected
-		}
-	}
-	
-	String receiveMessageOn(Socket socket){
-		try{
-			if(socket.isClosed())
-				throw new Exception("receiveMessageOn:"+socket.toString()+" is closed. Cannot continue");
-			DataInputStream dis = new DataInputStream(socket.getInputStream());
-			return dis.readUTF();
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			if(e.getMessage().contains("receiveMessageOn"))
-				System.exit(12); // exit 12 --> client to video Server abnormally disconnected
-			return "No reply received";
-		}
-	}*/
 	
 	void interact(){
 		Scanner scan = new Scanner(System.in);
