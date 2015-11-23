@@ -17,6 +17,7 @@ public class Client {
 	int receiverPortNumber = 6789;
 	private Socket socketToVideoServer;
 	private HashMap<Integer, Integer> videoID = new HashMap<Integer, Integer>();
+	private HashMap<Integer, String> videoName = new HashMap<Integer, String>();
 	
 	Client(String serverIP, int port){
 		//*this.serverIP = serverIP;
@@ -67,7 +68,7 @@ public class Client {
 	String getConcatenatedFileInfo(ArrayList<File> listOfFiles){
 		StringBuffer ret = new StringBuffer();
 		for(int i=0;i<listOfFiles.size();i++){
-			ret.append(listOfFiles.get(i).getName()).append(":").append(listOfFiles.get(i).length()/(256*1024)).append(';');
+			ret.append(listOfFiles.get(i).getName()).append(":").append(listOfFiles.get(i).length()/(256)).append(';');
 		}
 		return ret.toString();
 	}
@@ -150,18 +151,16 @@ public class Client {
 				System.out.println("Please enter a valid Line Number");
 				continue;
 			}
-			//sendMesssageOn(socketToVideoServer, preparePayLoad(3, id.toString()));
 			new SenderReceiver().sendMesssageOn(socketToVideoServer, new Packet(3, id.toString()).getPayload());
 			
 			Packet option4packet = new Packet(new SenderReceiver().receiveMessageOn(socketToVideoServer));
-			
 			ArrayList<Peer> peerList = getPeersFromOption4packet(option4packet);
 			
 			//
 			// start_video_while collating packets
 			//
 			System.out.println("Trying to get videoStream from these peers:"+peerList);
-			//call receiver passing list of peers
+			//call requestor passing list of peers
 			//EXITing CLIENT SERVER
 			break;
 		}
@@ -181,10 +180,7 @@ public class Client {
 				//System.out.println(Arrays.toString(peerDetails));
 				listOfPeers.add(new Peer(peerDetails[0],Integer.parseInt(peerDetails[1])));
 				
-			}	
-			
-			
-			
+			}		
 			return listOfPeers;
 		}
 		catch(Exception e){
@@ -219,6 +215,7 @@ public class Client {
 				String title = s.substring(0, 20);
 			   System.out.println((i+1)+"\t\t"+title+"\t\t"+videoDetails[2]+"\t\t"+videoDetails[3]);
 			   videoID.put(i+1,Integer.parseInt(videoDetails[0]));
+			   videoName.put(i+1, videoDetails[1]);
 			}
 		}
 		catch(Exception e){
@@ -231,7 +228,7 @@ public class Client {
 	public static void main(String[] args)throws IOException {
 		String[] connectionInfo = new URLReader().getConnectionString().split(":");;
 		Client c =new Client(connectionInfo[0],Integer.parseInt(connectionInfo[1]));
-		new Receiver(c.receiverPortNumber).start();
+		new RequestReceiver(c.receiverPortNumber).start();
 		//int i = Integer.parseInt(null);
 		
 		//Packet p = new Packet("|option|4|/option||data|192.168.1.1:20000;192.168.1.2:24000;|data|");

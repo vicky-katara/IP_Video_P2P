@@ -5,11 +5,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
-public class Receiver extends Thread
+public class RequestReceiver extends Thread
 {
    private ServerSocket serverSocket;
    
-   public Receiver(int port) throws IOException
+   public RequestReceiver(int port) throws IOException
    {
       serverSocket = new ServerSocket(port);
       serverSocket.setSoTimeout(0);
@@ -45,7 +45,7 @@ public class Receiver extends Thread
       int port = Integer.parseInt(args[0]);
       try
       {
-         Thread t = new Receiver(port);
+         Thread t = new RequestReceiver(port);
          t.start();
       }catch(IOException e)
       {
