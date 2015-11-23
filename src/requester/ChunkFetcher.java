@@ -1,4 +1,4 @@
-package requestor;
+package requester;
 
 import java.net.Socket;
 import java.util.concurrent.PriorityBlockingQueue;

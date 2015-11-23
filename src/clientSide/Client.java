@@ -11,7 +11,7 @@ import commonLibrary.Packet;
 import commonLibrary.SenderReceiver;
 import commonLibrary.Video;
 import requestReceiver.RequestReceiver;
-import requestor.Requestor;
+import requester.Requester;
 
 public class Client {
 	
@@ -148,7 +148,7 @@ public class Client {
 			System.out.println("Trying to get videoStream from these peers:"+peerList);
 			//call requestor passing list of peers
 			
-			new Requestor(requestedVideo, peerList);
+			new Requester(requestedVideo, peerList);
 			
 			//EXITing CLIENT SERVER
 			break;
