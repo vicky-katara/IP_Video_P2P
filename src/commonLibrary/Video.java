@@ -1,4 +1,4 @@
-package serverSideNew;
+package commonLibrary;
 
 import java.util.ArrayList;
 
@@ -10,14 +10,14 @@ public class Video {
 	String format;//not in use
 	ArrayList<Integer> clientIDList;
 	
-	Video(String videoTitle, int numChunks){//only comparison
+	public Video(String videoTitle, int numChunks){//only comparison
 		this.videoID = -1;
 		this.videoTitle = videoTitle;
 		this.numChunks = numChunks;
 		this.format = "mp4";
 	}
 	
-	Video(int id, String videoTitle, int numChunks, int clientID){
+	public Video(int id, String videoTitle, int numChunks, int clientID){
 		this.videoID = id;
 		this.videoTitle = videoTitle;
 		this.numChunks = numChunks;
@@ -26,19 +26,66 @@ public class Video {
 		clientIDList.add(clientID);
 	}
 	
-	Video(Video v){
+	public Video(int id, String videoTitle, int numChunks){ // only for use with Client to display and derive menu
+		this.videoID = id;
+		this.videoTitle = videoTitle;
+		this.numChunks = numChunks;
+		this.format = "mp4";
+	}
+	
+	public Video(Video v){
 		this.videoID = -1;
 		this.videoTitle = v.videoTitle;
 		this.numChunks = v.numChunks;
 	}
 	
-	Video(String unformatted){ //only comparison
+	public Video(String unformatted){ //only comparison
 		try{
 		String[] splitted = unformatted.split(":");
 		this.videoTitle = splitted[0];
 		this.numChunks = Integer.parseInt(splitted[1]);
 		}
 		catch(NumberFormatException nfe){System.err.println("Exception found in Video Class:");nfe.printStackTrace();}
+	}
+	
+	public String getVideoTitle() {
+		return videoTitle;
+	}
+
+	public void setVideoTitle(String videoTitle) {
+		this.videoTitle = videoTitle;
+	}
+
+	public int getVideoID() {
+		return videoID;
+	}
+
+	public void setVideoID(int videoID) {
+		this.videoID = videoID;
+	}
+
+	public int getNumChunks() {
+		return numChunks;
+	}
+
+	public void setNumChunks(int numChunks) {
+		this.numChunks = numChunks;
+	}
+
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
+	}
+
+	public void setClientIDList(ArrayList<Integer> clientIDList) {
+		this.clientIDList = clientIDList;
+	}
+
+	public ArrayList<Integer> getClientIDList(){
+		return this.clientIDList;
 	}
 	
 	public String toString(){

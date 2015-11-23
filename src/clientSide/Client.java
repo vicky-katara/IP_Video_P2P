@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 import commonLibrary.Packet;
 import commonLibrary.SenderReceiver;
+import commonLibrary.Video;
 
 public class Client {
 	
@@ -16,8 +17,9 @@ public class Client {
 	//int serverPort;
 	int receiverPortNumber = 6789;
 	private Socket socketToVideoServer;
-	private HashMap<Integer, Integer> videoID = new HashMap<Integer, Integer>();
-	private HashMap<Integer, String> videoName = new HashMap<Integer, String>();
+	//private HashMap<Integer, Integer> videoID = new HashMap<Integer, Integer>();
+	//private HashMap<Integer, String> videoName = new HashMap<Integer, String>();
+	private HashMap<Integer, Video> videoMap = new HashMap<Integer, Video>();
 	
 	Client(String serverIP, int port){
 		//*this.serverIP = serverIP;
@@ -144,23 +146,43 @@ public class Client {
 		while(true){
 			System.out.println("Enter the Line Number of the Video you wish to watch.\nPress 0 to Exit.\nEnter Option:");
 			int choice = scan.nextInt();
-			if(choice==0)
+			if(choice==0){
+				scan.close();
 				return;
-			Integer id = videoID.get(choice);
-			if(id==null){
+			}
+			Video requestedVideo = videoMap.get(choice);
+			int id = requestedVideo.getVideoID();
+			if(id==0){
 				System.out.println("Please enter a valid Line Number");
 				continue;
 			}
-			new SenderReceiver().sendMesssageOn(socketToVideoServer, new Packet(3, id.toString()).getPayload());
+			new SenderReceiver().sendMesssageOn(socketToVideoServer, new Packet(3, Integer.toString(id)).getPayload());
 			
 			Packet option4packet = new Packet(new SenderReceiver().receiveMessageOn(socketToVideoServer));
 			ArrayList<Peer> peerList = getPeersFromOption4packet(option4packet);
 			
+			if(peerList.isEmpty())
+				try {
+					throw new Exception("No Peers have that video currently.<Client.java: askUserForVideo>");
+				} catch (Exception e) {
+						try {
+							socketToVideoServer.close();
+							scan.close();
+						} catch (IOException e1) {
+						e1.printStackTrace();
+						scan.close();
+					}
+					e.printStackTrace();
+					scan.close();
+				}
 			//
 			// start_video_while collating packets
 			//
 			System.out.println("Trying to get videoStream from these peers:"+peerList);
 			//call requestor passing list of peers
+			
+			new Requestor(requestedVideo, peerList);
+			
 			//EXITing CLIENT SERVER
 			break;
 		}
@@ -214,8 +236,9 @@ public class Client {
 				s.append("                    ");
 				String title = s.substring(0, 20);
 			   System.out.println((i+1)+"\t\t"+title+"\t\t"+videoDetails[2]+"\t\t"+videoDetails[3]);
-			   videoID.put(i+1,Integer.parseInt(videoDetails[0]));
-			   videoName.put(i+1, videoDetails[1]);
+			   //videoID.put(i+1,Integer.parseInt(videoDetails[0]));
+			   Video v = new Video(Integer.parseInt(videoDetails[0]), videoDetails[1], Integer.parseInt(videoDetails[2]));
+			   videoMap.put((i+1), v);
 			}
 		}
 		catch(Exception e){

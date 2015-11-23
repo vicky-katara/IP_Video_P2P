@@ -3,6 +3,7 @@ package serverSideNew;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import commonLibrary.Video;
 
 public class VideoList {
 
@@ -14,7 +15,7 @@ public class VideoList {
 	}
 	
 	ArrayList<Integer> getClientsWhoHaveVideo(int videoID){
-		return videoList.get(videoID).clientIDList;
+		return videoList.get(videoID).getClientIDList();
 	}
 	
 	void addAndAttachClient(Video v, int clientID){
@@ -24,13 +25,12 @@ public class VideoList {
 	                entry.getValue().addClient(clientID);
 		}
 		else{
-			Video newVideo = new Video(++count, v.videoTitle, v.numChunks, clientID);
-			videoList.put(newVideo.videoID, newVideo);
+			Video newVideo = new Video(++count, v.getVideoTitle(), v.getNumChunks(), clientID);
+			videoList.put(newVideo.getVideoID(), newVideo);
 		}
 	}
 	
 	void addAllAndAttachClient(String unformattedList, int ownerID){
-		ArrayList<Integer> list = new ArrayList<Integer>();
 		String[] unformattedArray = unformattedList.split(";");
 		for(int i=0; i<unformattedArray.length;i++)
 			addAndAttachClient(new Video(unformattedArray[i]), ownerID);

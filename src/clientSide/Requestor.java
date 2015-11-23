@@ -1,10 +1,16 @@
 package clientSide;
 import java.util.ArrayList;
 
-public class Requestor {
+import commonLibrary.Video;
 
-	Requestor(ArrayList<Peer> listOfPeers){
-		
+public class Requestor {
+	
+	Video requestedVideo;
+	ArrayList<Peer> listOfPeers;
+
+	Requestor(Video requestedVideo, ArrayList<Peer> listOfPeers){
+		this.requestedVideo = requestedVideo;
+		this.listOfPeers = listOfPeers;
 	}
 	
 	public static void main(String args[]){
