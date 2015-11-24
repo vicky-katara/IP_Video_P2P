@@ -29,7 +29,7 @@ public class Packet {
 	}
 	
 	public String getPayload(){
-		return "|option|"+option+"|/option||data|"+data+"|data|";
+		return "|option|"+option+"|/option||data|"+data+"|/data|";
 	}
 	
 	public static void main(String[] args) {

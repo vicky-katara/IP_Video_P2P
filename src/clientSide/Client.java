@@ -71,6 +71,8 @@ public class Client {
 	
 	String getConcatenatedFileInfo(ArrayList<File> listOfFiles){
 		StringBuffer ret = new StringBuffer();
+		if(listOfFiles.size()==0)
+			return "null";
 		for(int i=0;i<listOfFiles.size();i++){
 			ret.append(listOfFiles.get(i).getName()).append(":").append(listOfFiles.get(i).length()/(256)).append(';');
 		}

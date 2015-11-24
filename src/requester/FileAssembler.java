@@ -25,9 +25,9 @@ public class FileAssembler extends Thread{
 		outputFileName = video.hashCode()+"-"+System.currentTimeMillis()+".mp4";
 	}
 	
-	private boolean chunkQueueHasNewElements(){
+/*	private boolean chunkQueueHasNewElements(){
 		return this.chunkQueueHasNewElements;
-	}
+	}*/
 	
 	public void run(){
 		while(this.nextChunkToBeAssembled < this.video.getNumChunks()){

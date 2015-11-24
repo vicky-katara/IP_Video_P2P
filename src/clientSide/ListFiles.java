@@ -22,6 +22,10 @@ public class ListFiles
 		  ArrayList<File> arr = new ArrayList<File>();
 		  File[] listOfFiles = folder.listFiles();
 		  
+		  if(listOfFiles.length == 0){
+			  System.err.println("You have no videos in your 'Videos' Folder. Sharing is caring!");
+		  }
+		  
 		  for (int i = 0; i < listOfFiles.length; i++){
 			  if (listOfFiles[i].isFile() || listOfFiles[i].getName().contains("Desktop")==false){
 				   arr.add(listOfFiles[i]);

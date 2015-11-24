@@ -26,8 +26,12 @@ public class Server implements Runnable {
 					String[] breakUp = receivedPacket.getData().split("::");
 					try{
 						if(breakUp.length!=2){
-							System.out.println(Arrays.toString(breakUp));
-							throw new Exception("Packet 0 not in expected format:"+receivedPacket);
+							if(breakUp[1].equals("null"))
+								continue;
+							else{
+								System.out.println(Arrays.toString(breakUp));
+								throw new Exception("Packet 0 not in expected format:"+receivedPacket);
+							}
 						}
 						Server.database.storeAllVideosOfClient(new Client(csocket.getInetAddress().getHostAddress()+":"+breakUp[0]), breakUp[1]);
 						
