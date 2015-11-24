@@ -8,8 +8,11 @@ public class NetworkAddress {
 	static String getIPAddress(String interfaceName){
 		try{
 		Enumeration<InetAddress> list = getInetAddresses(interfaceName);
-		if(list==null)
-			throw new Exception("No interface found with interface name "+interfaceName);
+		String ret;
+		if(list==null){
+			System.err.println("No interface found with interface name: "+interfaceName+". Returning Localhost IP Address "+(ret = InetAddress.getLocalHost().getHostAddress()));
+			return ret;
+		}
 		while(list.hasMoreElements()){
 			String add = list.nextElement().getHostAddress();
 			//System.out.println(add);

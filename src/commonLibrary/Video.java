@@ -89,7 +89,10 @@ public class Video {
 	}
 	
 	public String toString(){
-		return this.videoID+","+this.videoTitle+","+this.numChunks+","+this.format+","+this.clientIDList.size();
+		if(this.clientIDList != null)
+			return this.videoID+","+this.videoTitle+","+this.numChunks+","+this.format+","+this.clientIDList.size();
+		else
+			return this.videoID+","+this.videoTitle+","+this.numChunks+","+this.format+",0";
 	}
 	
 	public String completeToString(){
