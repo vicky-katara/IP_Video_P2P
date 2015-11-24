@@ -46,6 +46,7 @@ public class Servant extends Thread{
 			raf.seek(chunkNumber*256);
 			raf.read(b);
 			//System.out.println(Arrays.toString(b).replace("[", "").replace("]", "").replace(", ", newChar));
+			raf.close();
 			return new Chunk(b);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
