@@ -29,7 +29,11 @@ public class Servant extends Thread{
 				Chunk chunkToBeReturned = getRequestedChunk(splitted[0], Integer.parseInt(splitted[1]));
 				new SenderReceiver().sendMesssageOn(socketFromRequestor, new Packet(101, option100Packet.getData()+":"+chunkToBeReturned).getPayload());
 				
-			}catch(NullPointerException npe){System.err.println("Problem with option100Packet: "+option100Packet);npe.printStackTrace();}
+			}
+			catch(NullPointerException npe){
+				System.err.println("Problem with option100Packet: "+option100Packet);npe.printStackTrace();
+				currentThread().stop();
+			}
 			catch (Exception e) {e.printStackTrace();
 			}
 			
