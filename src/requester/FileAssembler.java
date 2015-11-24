@@ -1,5 +1,6 @@
 package requester;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -10,26 +11,27 @@ import commonLibrary.Video;
 
 public class FileAssembler extends Thread{
 
-	private boolean chunkQueueHasNewElements;
 	private boolean done[];
 	private Video video;
 	private int nextChunkToBeAssembled;
-	PriorityBlockingQueue<Chunk> chunkQueue;
+	private PriorityBlockingQueue<Chunk> chunkQueue;
 	private String outputFileName;
+	private Requester req;
 	
-	FileAssembler(Video video, PriorityBlockingQueue<Chunk> chunkQueue){
+	FileAssembler(Video video, Requester req){
 		this.video = video;
-		this.chunkQueue = chunkQueue;
+		this.chunkQueue = new PriorityBlockingQueue<Chunk>();
 		done = new boolean[video.getNumChunks()];
 		this.nextChunkToBeAssembled = 0;
-		outputFileName = video.hashCode()+"-"+System.currentTimeMillis()+".mp4";
+		outputFileName = System.getProperty("user.home")+File.separatorChar+"Videos"+File.separatorChar+video.hashCode()+"-"+System.currentTimeMillis()+".mp4";
+		this.req = req;	
 	}
 	
 /*	private boolean chunkQueueHasNewElements(){
 		return this.chunkQueueHasNewElements;
 	}*/
 	
-	public void run(){
+	public synchronized void run(){
 		while(this.nextChunkToBeAssembled < this.video.getNumChunks()){
 			try{
 				while(chunkQueue.isEmpty())
@@ -50,7 +52,10 @@ public class FileAssembler extends Thread{
 			RandomAccessFile raf = new RandomAccessFile(outputFileName, "rw");
 			raf.seek(toBeAppended.getChunkID()*256);
 			raf.write(toBeAppended.returnBytes());
+			raf.close();
 			done[toBeAppended.getChunkID()] = true;
+			if(chunkQueue.size()==40000)
+				resumeAwaitingChunkFetchers();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -66,9 +71,19 @@ public class FileAssembler extends Thread{
 		return false;
 	}
 	
-	public void handleNewChunks(){
-		this.chunkQueueHasNewElements = true;
+	public synchronized void offerChunk(Chunk newChunk){
+		this.chunkQueue.offer(newChunk);
 		notify();
+	}
+	
+	public boolean chunkQueueIsOverflowing(){
+		if(chunkQueue == null)
+			return false;
+		return this.chunkQueue.size()>50000 ? true:false;
+	}
+	
+	private void resumeAwaitingChunkFetchers(){
+		req.resumeAnyWaitingChunkFetcher();
 	}
 	
 	

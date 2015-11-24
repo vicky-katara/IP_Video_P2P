@@ -17,7 +17,7 @@ public class Client {
 	
 	//String serverIP;
 	//int serverPort;
-	int receiverPortNumber = 6789;
+	static int requestReceiverPortNumber = 6789;
 	private Socket socketToVideoServer;
 	//private HashMap<Integer, Integer> videoID = new HashMap<Integer, Integer>();
 	//private HashMap<Integer, String> videoName = new HashMap<Integer, String>();
@@ -39,7 +39,7 @@ public class Client {
 		
 		//prepare list of video file names
 		String fileInfo = getConcatenatedFileInfo(listOfFiles);
-		String videoListPayload = new Packet(0, this.receiverPortNumber+"::"+fileInfo).getPayload();//preparePayLoad(0, fileInfo); // FileNames is Option 0:
+		String videoListPayload = new Packet(0, this.requestReceiverPortNumber+"::"+fileInfo).getPayload();//preparePayLoad(0, fileInfo); // FileNames is Option 0:
 		
 		System.out.println("videoListPayload packet:"+videoListPayload);
 		// send list of videos to server
@@ -98,7 +98,7 @@ public class Client {
 					break;
 				}
 			}
-		}catch(Exception e){e.printStackTrace(); scan.close();}
+		}catch(Exception e){e.printStackTrace();}
 	}
 	
 	void printMainMenu(){
@@ -113,7 +113,7 @@ public class Client {
 	void askUserForVideo(){
 		Scanner scan = new Scanner(System.in);
 		while(true){
-			System.out.println("Enter the Line Number of the Video you wish to watch.\nPress 0 to Exit.\nEnter Option:");
+			System.out.print("Enter the Line Number of the Video you wish to watch.\nPress 0 to Exit.\nEnter Option:");
 			int choice = scan.nextInt();
 			if(choice==0){
 				//scan.close();
@@ -155,7 +155,7 @@ public class Client {
 			//EXITing CLIENT SERVER
 			break;
 		}
-		scan.close();
+		//scan.close();
 	}
 	
 	ArrayList<Peer> getPeersFromOption4packet(Packet option4packet){
@@ -218,9 +218,9 @@ public class Client {
 	}
 	
 	public static void main(String[] args)throws IOException {
-		String[] connectionInfo = new URLReader().getConnectionString().split(":");;
+		String[] connectionInfo = new URLReader().getConnectionString().split(":");
+		new RequestReceiver(requestReceiverPortNumber).start();
 		Client c =new Client(connectionInfo[0],Integer.parseInt(connectionInfo[1]));
-		new RequestReceiver(c.receiverPortNumber).start();
 		//int i = Integer.parseInt(null);
 		
 		//Packet p = new Packet("|option|4|/option||data|192.168.1.1:20000;192.168.1.2:24000;|data|");

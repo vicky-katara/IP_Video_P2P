@@ -15,15 +15,17 @@ public class ChunkFetcher extends Thread{
 	Video video;
 	int startNum;
 	int offset;
-	PriorityBlockingQueue<Chunk> chunkQueue;
+	//PriorityBlockingQueue<Chunk> chunkQueue;
+	FileAssembler fileAssembler;
 	
-	ChunkFetcher(Video video, int startNum, int offset, Peer requestReceiver, PriorityBlockingQueue<Chunk> chunkQueue){
+	ChunkFetcher(Video video, int startNum, int offset, Peer requestReceiver, FileAssembler fileAssembler){
 		System.out.println("Starting new ChunkFetcher thread for chunks "+startNum+"+ "+offset+"*k to fetch "+video+ " from "+requestReceiver);
 		this.video = video;
 		this.startNum = startNum;
 		this.offset = offset;
 		this.socketToRequestReceiver = new SenderReceiver().returnSocketTo(requestReceiver.getIpAddress(), requestReceiver.getPortNumber());
-		this.chunkQueue = chunkQueue;
+		//this.chunkQueue = chunkQueue;
+		this.fileAssembler = fileAssembler;
 	}
 	
 	public void run(){
@@ -37,8 +39,9 @@ public class ChunkFetcher extends Thread{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			chunkQueue.add(new Chunk(chunkNumber, option101Packet.getData()));
-			while(chunkQueue.size() > 50000)
+			//chunkQueue.add(new Chunk(chunkNumber, option101Packet.getData()));
+			fileAssembler.offerChunk(new Chunk(chunkNumber, option101Packet.getData().split(":")[2]));
+			while(fileAssembler.chunkQueueIsOverflowing())
 				try {
 					wait();
 				} catch (InterruptedException e) {
@@ -47,7 +50,7 @@ public class ChunkFetcher extends Thread{
 		}
 	}
 	
-	public void resumeIfWaiting(){
+	public synchronized void resumeIfWaiting(){
 		notify();
 	}
 	

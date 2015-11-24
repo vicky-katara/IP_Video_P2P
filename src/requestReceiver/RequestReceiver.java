@@ -11,8 +11,9 @@ public class RequestReceiver extends Thread
    
    public RequestReceiver(int port) throws IOException
    {
-      serverSocket = new ServerSocket(port);
-      serverSocket.setSoTimeout(0);
+	   serverSocket = new ServerSocket(port);
+	   System.out.println("Request Receiver Running on "+serverSocket.getInetAddress()+":"+serverSocket.getLocalPort());
+	   serverSocket.setSoTimeout(0);
    }
 
    public void run()

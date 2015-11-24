@@ -10,20 +10,22 @@ public class Requester {
 	
 	Video requestedVideo;
 	ArrayList<Peer> listOfPeers;
-	PriorityBlockingQueue<Chunk> chunkQueue;
+	//PriorityBlockingQueue<Chunk> chunkQueue;
 	ChunkFetcher[] chunkFetcherArr;
+	FileAssembler fileAssembler;
 	
 	public Requester(Video requestedVideo, ArrayList<Peer> listOfPeers){
 		this.requestedVideo = requestedVideo;
 		this.listOfPeers = listOfPeers;
-		this.chunkQueue = new PriorityBlockingQueue<Chunk>();
+		fileAssembler = new FileAssembler(requestedVideo, this);
+		fileAssembler.start();
 		dispatch();
-		new FileAssembler(requestedVideo, chunkQueue).start();
 	}
 	
 	void dispatch(){
-		for(int chunkFetcherNumber=0; chunkFetcherNumber<Math.min(listOfPeers.size(),requestedVideo.getNumChunks()); chunkFetcherNumber++){
-			chunkFetcherArr[chunkFetcherNumber] = new ChunkFetcher(requestedVideo, chunkFetcherNumber, listOfPeers.size(), listOfPeers.get(chunkFetcherNumber), chunkQueue);
+		chunkFetcherArr = new ChunkFetcher[Math.min(listOfPeers.size(),requestedVideo.getNumChunks())];
+		for(int chunkFetcherNumber=0; chunkFetcherNumber<chunkFetcherArr.length; chunkFetcherNumber++){
+			chunkFetcherArr[chunkFetcherNumber] = new ChunkFetcher(requestedVideo, chunkFetcherNumber, listOfPeers.size(), listOfPeers.get(chunkFetcherNumber),fileAssembler);
 			chunkFetcherArr[chunkFetcherNumber].start();
 		}
 	}
