@@ -40,6 +40,7 @@ public class ChunkFetcher extends Thread{
 					e.printStackTrace();
 				}
 			//chunkQueue.add(new Chunk(chunkNumber, option101Packet.getData()));
+			System.out.println("Received Chunk #"+chunkNumber+" of "+video.getVideoTitle()+" from "+socketToRequestReceiver.getInetAddress()+":"+socketToRequestReceiver.getPort());
 			fileAssembler.offerChunk(new Chunk(chunkNumber, option101Packet.getData().split(":")[2]));
 			while(fileAssembler.chunkQueueIsOverflowing())
 				try {
