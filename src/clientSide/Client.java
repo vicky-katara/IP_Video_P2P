@@ -116,7 +116,7 @@ public class Client {
 			System.out.println("Enter the Line Number of the Video you wish to watch.\nPress 0 to Exit.\nEnter Option:");
 			int choice = scan.nextInt();
 			if(choice==0){
-				scan.close();
+				//scan.close();
 				return;
 			}
 			Video requestedVideo = videoMap.get(choice);
