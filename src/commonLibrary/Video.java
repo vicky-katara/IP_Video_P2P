@@ -89,7 +89,7 @@ public class Video {
 	}
 	
 	public String toString(){
-		return this.videoID+","+this.videoTitle+","+this.numChunks+","+this.format;
+		return this.videoID+","+this.videoTitle+","+this.numChunks+","+this.format+","+this.clientIDList.size();
 	}
 	
 	public String completeToString(){
@@ -126,6 +126,7 @@ public class Video {
 		System.out.println(v.completeToString());
 		v.addClient(5);
 		System.out.println(v.completeToString());
+		System.out.println(v);
 	}
 	
 }

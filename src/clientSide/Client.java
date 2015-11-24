@@ -195,7 +195,7 @@ public class Client {
 			//System.out.println(Arrays.toString(list));
 		   
 			System.out.println(".............Video Details................");
-			System.out.println("Sr. No\t\t Video title\t\t No. of chunks \t      Format");
+			System.out.println("Sr. No\t\t Video title\t\t No. of chunks \t      Format \t      Number of Peers");
 			for (int i = 0; i < list.length; i++)
 			{ 
 				//System.out.println(list[i]);
@@ -204,7 +204,7 @@ public class Client {
 				StringBuffer s = new StringBuffer(videoDetails[1]);
 				s.append("                    ");
 				String title = s.substring(0, 20);
-			   System.out.println((i+1)+"\t\t"+title+"\t\t"+videoDetails[2]+"\t\t"+videoDetails[3]);
+			   System.out.println((i+1)+"\t\t"+title+"\t\t"+videoDetails[2]+"\t\t"+videoDetails[3]+"\t\t"+videoDetails[4]);
 			   //videoID.put(i+1,Integer.parseInt(videoDetails[0]));
 			   Video v = new Video(Integer.parseInt(videoDetails[0]), videoDetails[1], Integer.parseInt(videoDetails[2]));
 			   videoMap.put((i+1), v);
