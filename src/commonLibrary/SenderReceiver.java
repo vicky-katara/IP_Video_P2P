@@ -16,7 +16,8 @@ public class SenderReceiver {
 				throw new Exception("receiveMessageOn:"+socket.toString()+" is closed. Cannot continue");
 			DataInputStream dis = new DataInputStream(socket.getInputStream());
 			String msg = dis.readUTF();
-			System.out.println("receiveMessageOn() Received "+msg.substring(0, 20));
+			//System.out.println("receiveMessageOn() Received "+msg.substring(0, 20));
+			//System.out.println("receiveMessageOn() Received "+msg);
 			return msg;
 		}
 		catch(Exception e){
@@ -31,7 +32,8 @@ public class SenderReceiver {
 		try{
 			if(socket.isClosed())
 				throw new Exception("sendMesssageOn:"+socket.toString()+" is closed. Cannot continue");
-			System.out.println("Trying to send |"+payload.substring(0, Math.min(20, payload.length()))+"...| to "+socket.getInetAddress()+":"+socket.getPort());
+			//System.out.println("Trying to send |"+payload.substring(0, Math.min(20, payload.length()))+"...| to "+socket.getInetAddress()+":"+socket.getPort());
+			//System.out.println("Trying to send |"+payload+"...| to "+socket.getInetAddress()+":"+socket.getPort());
 			DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 			dos.writeUTF(payload);
 		}

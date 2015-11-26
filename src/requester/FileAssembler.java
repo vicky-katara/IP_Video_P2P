@@ -1,7 +1,10 @@
 package requester;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.concurrent.PriorityBlockingQueue;
@@ -17,6 +20,8 @@ public class FileAssembler extends Thread{
 	private PriorityBlockingQueue<Chunk> chunkQueue;
 	private String outputFileName;
 	private Requester req;
+	private VideoHandler videoHandler;
+	private boolean videoPlayerHasBeenStarted;
 	
 	FileAssembler(Video video, Requester req){
 		this.video = video;
@@ -25,7 +30,9 @@ public class FileAssembler extends Thread{
 		this.nextChunkToBeAssembled = 0;
 		outputFileName = System.getProperty("user.home")+File.separatorChar+"Videos"+File.separatorChar+video.hashCode()+"-"+System.currentTimeMillis()+".mp4";
 		this.req = req;	
-	}
+		videoHandler = new VideoHandler(this);
+		videoPlayerHasBeenStarted = false;
+	}	
 	
 /*	private boolean chunkQueueHasNewElements(){
 		return this.chunkQueueHasNewElements;
@@ -39,8 +46,16 @@ public class FileAssembler extends Thread{
 				while(chunkQueue.peek().getChunkID() != this.nextChunkToBeAssembled)
 					wait();
 				assemble(chunkQueue.poll());
-				if(assemblyComplete())
+				if(assemblyComplete()){
 					System.out.println("Exit or whatever: FileAssembler.run()...");
+					//videoHandler.start();
+				}
+				if(videoPlayerHasBeenStarted==false){
+					if(this.nextChunkToBeAssembled >= 6000){
+						videoPlayerHasBeenStarted = true;
+						videoHandler.start();
+					}
+				}
 			}catch(InterruptedException ie){ie.printStackTrace();}
 		}
 	}
@@ -49,13 +64,20 @@ public class FileAssembler extends Thread{
 		try {
 			if(done[toBeAppended.getChunkID()] == true)
 				throw new Exception("Chunk already written in file");
-			RandomAccessFile raf = new RandomAccessFile(outputFileName, "rw");
-			raf.seek(toBeAppended.getChunkID()*256);
-			raf.write(toBeAppended.returnBytes());
-			raf.close();
+			//RandomAccessFile raf = new RandomAccessFile(outputFileName, "rw");
+			//raf.seek(toBeAppended.getChunkID()*256);
+			//raf.write(toBeAppended.returnBytes());
+			//raf.close();
+			
+			FileOutputStream fos = new FileOutputStream(outputFileName, true);
+			fos.write(toBeAppended.returnBytes());
+			fos.close();
+			
+			
 			done[toBeAppended.getChunkID()] = true;
 			if(chunkQueue.size()==40000)
 				resumeAwaitingChunkFetchers();
+			videoHandler.bufferringMayHaveCompleted();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -86,5 +108,16 @@ public class FileAssembler extends Thread{
 		req.resumeAnyWaitingChunkFetcher();
 	}
 	
+	public int getNextChunkToBeAssembled(){
+		return nextChunkToBeAssembled;
+	}
+	
+	public int getTotalNumChunks(){
+		return video.getNumChunks();
+	}
+	
+	public String getPathOfFile(){
+		return this.outputFileName;
+	}
 	
 }

@@ -74,7 +74,7 @@ public class Client {
 		if(listOfFiles.size()==0)
 			return "null";
 		for(int i=0;i<listOfFiles.size();i++){
-			ret.append(listOfFiles.get(i).getName()).append(":").append(listOfFiles.get(i).length()/(256)).append(';');
+			ret.append(listOfFiles.get(i).getName()).append(":").append((int)Math.ceil(listOfFiles.get(i).length()/(256.0))).append(';');
 		}
 		return ret.toString();
 	}
