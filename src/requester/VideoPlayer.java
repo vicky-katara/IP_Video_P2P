@@ -81,7 +81,7 @@ public class VideoPlayer extends Application{
      
 	public static void main(String[] args) throws Exception{
 		System.out.println("Video Launching");
-		if(args!=null)
+		if(args!=null && args.length > 0)
 			filePath = args[0];
 		launch(args);
 	}
@@ -97,9 +97,14 @@ public class VideoPlayer extends Application{
 		try{
 			if(filePath!=null)
 				file = new File(this.filePath);
-			else
-				file = new File("C:\\Users\\Vicky Katara\\Videos\\1163157884-1448523731124.mp4");
-			System.out.println("Found video file at "+file.getAbsolutePath());
+			else{
+				file = new File("/home/servo/Videos/2101973421-1448825095508.mp4");
+				filePath = "/home/servo/Videos/2101973421-1448825095508.mp4";
+			}
+			System.out.println("Found video file at "+file.getAbsolutePath()+":::"+file.toURI().toURL().toString());
+			System.out.println(file.toURL().toString());
+			System.out.println(file.toURI().toString());
+			System.out.println(file.toURI().toURL().toString());
 		}
 		catch(Exception e){
 			System.err.println("Vicky: "+filePath);

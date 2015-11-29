@@ -4,7 +4,7 @@ import java.io.File;
 
 public class VideoHandler extends Thread{
 	private String filePath;
-	private VideoPlayer videoPlayer;
+	//private VideoPlayer videoPlayer;
 	private FileAssembler fileAssembler;
 	private double durationInSecs;
 	private int totalNumChunks;
@@ -22,10 +22,10 @@ public class VideoHandler extends Thread{
 		try {
 			while(true){	
 				while(chunksAvailable() - chunksConsumed() <= 100){
-						videoPlayer.buffer();
+						//videoPlayer.buffer();
 						wait();
 				}
-				videoPlayer.resume();
+				//videoPlayer.resume();
 			}
 		}
 		catch (Exception e) {
@@ -41,15 +41,17 @@ public class VideoHandler extends Thread{
 	}
 	
 	private int chunksConsumed(){
-		return (int)(( videoPlayer.getCurrentTimeInSeconds() * totalNumChunks ) / durationInSecs);
+		return (int)(( 1000 * totalNumChunks ) / durationInSecs);
 	}
 	
 	public void run(){
 		try{
 			//videoPlayer = new VideoPlayer(this);
 			System.out.println("Video about to begin");
-			VideoPlayer.main(new String[]{filePath});
-			this.durationInSecs = videoPlayer.getDurationInSeconds();
+			//VideoPlayer.main(new String[]{filePath});
+			//new VideoCommandExecutor().playVideo(filePath);
+			Runtime.getRuntime().exec("vlc "+filePath+" --fullscreen");
+			//this.durationInSecs = videoPlayer.getDurationInSeconds();
 			monitorBufferring();
 		}
 		catch(Exception e){e.printStackTrace();}
@@ -64,7 +66,7 @@ public class VideoHandler extends Thread{
 	}
 	
 	public static void main(String[] args) {
-		String s = System.getProperty("user.home")+File.separatorChar+"Videos"+File.separatorChar;
+		//String s = System.getProperty("user.home")+File.separatorChar+"Videos"+File.separatorChar;
 		//new VideoHandler(s+"856419764-1448347491203.mp4", null).start();
 		
 	}

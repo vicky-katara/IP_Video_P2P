@@ -51,7 +51,7 @@ public class FileAssembler extends Thread{
 					videoHandler.start();
 				}
 				if(videoPlayerHasBeenStarted==false){
-					if(this.nextChunkToBeAssembled >= 6000){
+					if(this.nextChunkToBeAssembled >= 2000){
 						videoPlayerHasBeenStarted = true;
 						//videoHandler.start();
 					}
