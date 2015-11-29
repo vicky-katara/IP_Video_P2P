@@ -48,12 +48,12 @@ public class FileAssembler extends Thread{
 				assemble(chunkQueue.poll());
 				if(assemblyComplete()){
 					System.out.println("Exit or whatever: FileAssembler.run()...");
-					//videoHandler.start();
+					videoHandler.start();
 				}
 				if(videoPlayerHasBeenStarted==false){
 					if(this.nextChunkToBeAssembled >= 6000){
 						videoPlayerHasBeenStarted = true;
-						videoHandler.start();
+						//videoHandler.start();
 					}
 				}
 			}catch(InterruptedException ie){ie.printStackTrace();}
