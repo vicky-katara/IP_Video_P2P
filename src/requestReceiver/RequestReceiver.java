@@ -1,19 +1,21 @@
 package requestReceiver;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
 public class RequestReceiver extends Thread
 {
-   private ServerSocket serverSocket;
+   private DatagramSocket UDPserverSocket;
    
    public RequestReceiver(int port) throws IOException
    {
-	   serverSocket = new ServerSocket(port);
-	   System.out.println("Request Receiver Running on "+serverSocket.getInetAddress()+":"+serverSocket.getLocalPort());
-	   serverSocket.setSoTimeout(0);
+	   UDPserverSocket = new DatagramSocket(port);
+	   System.out.println("UDP Request Receiver Running on "+UDPserverSocket.getInetAddress()+":"+UDPserverSocket.getLocalPort());
+	   UDPserverSocket.setSoTimeout(0);
    }
 
    public void run()
@@ -23,11 +25,13 @@ public class RequestReceiver extends Thread
          try
          {
             //System.out.println("Waiting for client on port " +serverSocket.getLocalPort() + "...");
-            Socket socketFromPeer = serverSocket.accept();
-            System.out.println("Request received from "+ socketFromPeer.getRemoteSocketAddress()+":"+socketFromPeer.getPort());
+        	 byte[] receiveBuffer = new byte[512];
+        	 DatagramPacket receivePacket = new DatagramPacket(receiveBuffer, receiveBuffer.length);
+        	 UDPserverSocket.receive(receivePacket);
+        	 System.out.println("Request received from "+ receivePacket.getSocketAddress()+":"+receivePacket.getPort());
             
             // Start new 'Servant' thread and make it serve the peer
-            new Servant(socketFromPeer).start();
+            new Servant(receivePacket, UDPserverSocket).start();
             //socketFromPeer.close();
             
          }catch(SocketTimeoutException s)

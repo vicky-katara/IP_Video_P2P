@@ -11,7 +11,7 @@ public class Peer {
 		return portNumber;
 	}
 	private int portNumber;
-	Peer(String ipAddress, int portNumber){
+	public Peer(String ipAddress, int portNumber){
 		this.ipAddress = ipAddress;
 		this.portNumber = portNumber;
 	}
