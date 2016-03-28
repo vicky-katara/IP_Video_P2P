@@ -42,7 +42,7 @@ public class UploadToServer {
         String SFTPHOST = "ftp.ncsu.edu";
         int SFTPPORT = 22;
         String SFTPUSER = "vpkatara";
-        String SFTPPASS = "SuperKam@1";
+        String SFTPPASS = /*password*/;
 
         Session session = null;
         Channel channel = null;
